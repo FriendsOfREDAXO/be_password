@@ -1,0 +1,8 @@
+package: be_password
+version: '0.0.1'
+author: 'Adrian Kühnis'
+
+requires:
+    redaxo: ^5.1.0
+    packages:
+        phpmailer: ^2
