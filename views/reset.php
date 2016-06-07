@@ -11,7 +11,7 @@
                     <div class="alert alert-danger"><?php echo $error;?></div>
                 <?php elseif ('' != $success):?>
                     <div class="alert alert-success"><?php echo $success;?></div>
-                    <div><a class="btn btn-success" href="">Weiter</a></div>
+                    <div><a class="btn btn-success" href="index.php">Weiter</a></div>
                 <?php else:?>
                     <div class="form-group"> 
                         <label>Neues Passwort</label>

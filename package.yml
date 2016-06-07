@@ -1,5 +1,5 @@
 package: be_password
-version: '0.0.1'
+version: '0.0.3'
 author: 'Adrian Kühnis'
 
 requires:
