@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS `rex_user_passwordreset`;
+DROP TABLE IF EXISTS `%TABLE_PREFIX%user_passwordreset`;
 CREATE TABLE `rex_user_passwordreset` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
