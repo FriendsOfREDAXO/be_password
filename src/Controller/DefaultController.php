@@ -100,6 +100,7 @@ class DefaultController
             $db->setTable('rex_user');
             $db->setWhere(array('id' => $user_id));
             $db->setValue('password', $password);
+            $db->setValue('login_tries', 0);
             $db->update();
             
             // Lösche tokens
