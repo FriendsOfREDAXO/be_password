@@ -13,6 +13,7 @@ spl_autoload_register(function ($class) {
 });
 if('login' == rex_be_controller::getCurrentPage()){
     rex_view::addJsFile(rex_url::addonAssets('be_password', 'javascript/be_password.js'));
+    rex_view::addCssFile(rex_url::addonAssets('be_password', 'be_password.css'));
 }
 rex_extension::register('PACKAGES_INCLUDED',function(){
     // mailer-klasse selbst laden... warum auch immer
