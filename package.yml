@@ -8,4 +8,4 @@ requires:
         phpmailer: ^2
 page:
     title: 'Passwort-Reset Mail'  
-    perm: be_password[]
+    perm: admin
