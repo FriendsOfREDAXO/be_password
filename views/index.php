@@ -3,6 +3,6 @@
     href=""
     class="has-handler"
     data-handler="click:BePassHandler:showForm"
-    ><?php echo $this->i18n('be_password_ask') ?></a>
+    >Passwort vergessen?</a>
 </div>
 
