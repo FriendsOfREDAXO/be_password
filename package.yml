@@ -1,6 +1,6 @@
 package: be_password
 version: '0.4.0'
-author: 'Adrian Kühnis'
+author: 'Friends Of REDAXO'
 
 requires:
     redaxo: ^5.1.0
@@ -8,4 +8,4 @@ requires:
         phpmailer: ^2
 page:
     title: 'Passwort-Reset Mail'  
-    perm: be_password[]
+    perm: admin

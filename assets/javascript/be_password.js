@@ -67,8 +67,8 @@ $(function(){
         BePassHandler.showReset({token: token});
     }else{
         $.get('index.php?be_password_request=/default/index', function(dat){
-            $("#rex-js-page-main .btn-toolbar").prepend(dat);
-            applyHandlers("#be_password_forgotten .has-handler");
+            $("#rex-js-page-main .btn-toolbar").append(dat);
+            applyHandlers("#be_password_forgotten.has-handler");
         });
     }
 });
