@@ -1,7 +1,7 @@
-<?php 
+<?php
 spl_autoload_register(function ($class) {
     $prefix = 'BePassword';
-    $base_dir = dirname(__FILE__).'/src';
+    $base_dir = dirname(__FILE__) . '/src';
 
     $len = strlen($prefix);
     if (strncmp($prefix, $class, $len) !== 0) return;
@@ -11,27 +11,27 @@ spl_autoload_register(function ($class) {
         require $file;
     }
 });
-if('login' == rex_be_controller::getCurrentPage()){
+if ('login' == rex_be_controller::getCurrentPage()) {
     rex_view::addJsFile(rex_url::addonAssets('be_password', 'javascript/be_password.js'));
     rex_view::addCssFile(rex_url::addonAssets('be_password', 'be_password.css'));
 }
-rex_extension::register('PACKAGES_INCLUDED',function(){
+rex_extension::register('PACKAGES_INCLUDED', function () {
     // mailer-klasse selbst laden... warum auch immer
-    require_once __DIR__.'/../phpmailer/lib/mailer.php';
-    if(
+    require_once __DIR__ . '/../phpmailer/lib/mailer.php';
+    if (
         isset($_GET['be_password_request'])
         && 2 <= substr_count($_GET['be_password_request'], '/')
-    ){
+    ) {
         $a = explode('/', $_GET['be_password_request']);
         $controller = ucfirst($a[1]);
-        $action = $a[2].'Action';
-        if(isset($a[3])){
+        $action = $a[2] . 'Action';
+        if (isset($a[3])) {
             $arg = $a[3];
-        }else{
+        } else {
             $arg = '';
         }
-        $controller_file = ucfirst($a[1]).'Controller.php';
-        $controller_class = 'BePassword\Controller\\'.ucfirst($a[1]).'Controller';
+        $controller_file = ucfirst($a[1]) . 'Controller.php';
+        $controller_class = 'BePassword\Controller\\' . ucfirst($a[1]) . 'Controller';
         $c = new $controller_class();
         $content = $c->{$action}($arg);
         echo $content;
