@@ -7,7 +7,7 @@ if ($error != '') {
     echo '<div class="rex-js-login-message">' . rex_view::error($error) . "</div>";
 }
 
-if ($success == '' && $error == '') {
+if ($success == '' || $showForm == true) {
 
     $email = rex_request('email', 'string');
 

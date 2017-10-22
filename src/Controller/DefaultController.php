@@ -78,7 +78,9 @@ class DefaultController
         $filter_service = new FilterService();
         $error = '';
         $success='';
+        $showForm = false;
         $token = isset($_GET['token'])?$_GET['token'] : '';
+        $pw_hash = \rex_request::post('pw_hash');
 
         $db = \rex_sql::factory();
         $sql = "SELECT * 
@@ -94,9 +96,20 @@ class DefaultController
         }else{
             $user_id = $rows[0]['user_id'];
         }
-        if('' == $error && isset($_POST['pw_hash'])){
+
+        // Prüfe Passwort-Regeln
+        if ('' == $error && !empty($pw_hash)) {
+            if (class_exists('\rex_backend_password_policy')) {
+                if (true !== $msg = \rex_backend_password_policy::factory(\rex::getProperty('password_policy', []))->check($pw_hash, $user_id)) {
+                    $error = $msg;
+                    $showForm = true;
+                }
+            }
+        }
+
+        if('' == $error && !empty($pw_hash)){
             // Setze passwort neu
-            $password = \rex_login::passwordHash($_POST['pw_hash'], true);
+            $password = \rex_login::passwordHash($pw_hash);
             $db->setTable('rex_user');
             $db->setWhere(array('id' => $user_id));
             $db->setValue('password', $password);
@@ -108,7 +121,7 @@ class DefaultController
             $db->setTable(\rex::getTable('user_passwordreset'));
             $db->setWhere( array( 'user_id' => $user_id));
             $db->delete();
-            $success = 'Passwort wurde gesetzt';
+            $success = 'Passwort wurde gesetzt. Weiter zum <a href="' . \rex_url::currentBackendPage() . '">Login</a>.';
 
         }
         return $render_service->render(
