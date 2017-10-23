@@ -85,7 +85,7 @@ class DefaultController
         $success = '';
         $showForm = false;
         $token = isset($_GET['token']) ? $_GET['token'] : '';
-        $pw_hash = \rex_request::post('pw_hash');
+        $pw = \rex_request::post('pw');
 
         $db = \rex_sql::factory();
         $sql = "SELECT * 
@@ -103,18 +103,18 @@ class DefaultController
         }
 
         // Prüfe Passwort-Regeln
-        if ('' == $error && !empty($pw_hash)) {
+        if ('' == $error && !empty($pw)) {
             if (class_exists('\rex_backend_password_policy')) {
-                if (true !== $msg = \rex_backend_password_policy::factory(\rex::getProperty('password_policy', []))->check($pw_hash, $user_id)) {
+                if (true !== $msg = \rex_backend_password_policy::factory(\rex::getProperty('password_policy', []))->check($pw, $user_id)) {
                     $error = $msg;
                     $showForm = true;
                 }
             }
         }
 
-        if ('' == $error && !empty($pw_hash)) {
+        if ('' == $error && !empty($pw)) {
             // Setze passwort neu
-            $password = \rex_login::passwordHash($pw_hash);
+            $password = \rex_login::passwordHash($pw);
             $db->setTable('rex_user');
             $db->setWhere(array('id' => $user_id));
             $db->setValue('password', $password);

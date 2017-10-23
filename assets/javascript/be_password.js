@@ -43,7 +43,7 @@ var BePassHandler = (function () {
             });
         } else {
             var pw = $(form).find('input[name="password"]').val();
-            $.post(url, {pw_hash: pw}, function (dat) {
+            $.post(url, {pw: pw}, function (dat) {
                 $("#rex-js-page-main").html(dat);
                 applyHandlers("#rex-js-page-main .has-handler");
             });
