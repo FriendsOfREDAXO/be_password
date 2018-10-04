@@ -16,3 +16,5 @@ be_password_mail_legend     = E-Mail für das Zurücksetzen des Passworts anpass
 be_password_mail_subject    = Betreff
 be_password_mail_placeholder= Platzhalter für URL:
 be_password_save            = Speichern
+
+be_password_default_subject = REDAXO Passwort-Reset
