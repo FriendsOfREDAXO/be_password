@@ -13,7 +13,7 @@ if (isset($_POST['subject'])) {
     $body = $fs->filterText($_POST['body']);
     rex_config::set('be_password', 'mail_subject_de', $subject);
     rex_config::set('be_password', 'mail_body_html_de', $body);
-    $success = 'Änderungen gespeichert';
+    $success = $this->i18n('be_password_confirm');
 }
 
 
@@ -27,33 +27,33 @@ if ('' != $success):?>
         <div class="panel panel-edit">
             <header class="panel-heading">
                 <div class="panel-title">
-                    Email für Passwort-Reset anpassen
+                   <?php $this->i18n('be_password_mail_legend') ?>
                 </div>
             </header>
             <div class="panel-body">
                 <div class="form-group">
-                    <label>Mail-Betreff</label>
+                    <label><?php echo $this->i18n('be_password_mail_subject') ?></label>
                     <input
                             class="form-control"
                             type="text"
                             name="subject"
-                            value="<?php echo htmlspecialchars($subject); ?>"
+                            value="<?php echo rex_escape($subject); ?>"
                     />
                 </div>
                 <div class="form-group">
-                    <label>Mail-Inhalt</label>
+                    <?php echo $this->i18n('be_password_mail_template') ?>
                     <textarea
                             class="form-control redactorEditor-full"
                             id="redactor_1"
                             name="body"
-                    ><?php echo htmlspecialchars($body); ?></textarea>
-                    <div><i>Platzhalter für URL: {{url}}</i></div>
+                    ><?php echo rex_escape($body); ?></textarea>
+                    <div><i><?php echo $this->i18n('be_password_mail_placeholder') ?> {{url}}</i></div>
                 </div>
                 <div class="form-group">
                     <button
                             class="btn btn-default"
                             type="submit"
-                    >Speichern
+                    ><?php echo $this->i18n('be_password_save') ?></button>
                     </button>
                     <div>
     </section>

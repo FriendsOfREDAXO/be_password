@@ -1,0 +1,20 @@
+be_password_title           = Passwort zurücksetzen
+be_password_description     = Sendet auf Wunsch dem Backend-Benutzer einen Link zum zurücksetzen seines Passworts.
+
+be_password_new_instruction = Sie erhalten einen Link an die hinterlegte E-Mail-Adresse, mit dem Sie Ihr Passwort zurücksetzen können.
+be_password_new_legend      = Neues Passwort
+be_password_confirm         = Das neue Passwort wurde gespeichert.
+be_password_mail            = E-Mail-Adresse
+be_password_next            = Weiter
+be_password_cancle          = Abbrechen
+be_password_request         = Passwort anfordern
+be_password_ask             = Passwort vergessen?
+be_password_new             = Neues Passwort eingeben
+
+be_password_mail_template   = E-Mail-Template
+be_password_mail_legend     = E-Mail für das Zurücksetzen des Passworts anpassen
+be_password_mail_subject    = Betreff
+be_password_mail_placeholder= Platzhalter für URL:
+be_password_save            = Speichern
+
+be_password_default_subject = REDAXO Passwort-Reset
