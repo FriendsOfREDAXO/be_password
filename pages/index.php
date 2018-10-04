@@ -37,7 +37,7 @@ if ('' != $success):?>
                             class="form-control"
                             type="text"
                             name="subject"
-                            value="<?php echo htmlspecialchars($subject); ?>"
+                            value="<?php echo rex_escape($subject); ?>"
                     />
                 </div>
                 <div class="form-group">
@@ -46,7 +46,7 @@ if ('' != $success):?>
                             class="form-control redactorEditor-full"
                             id="redactor_1"
                             name="body"
-                    ><?php echo htmlspecialchars($body); ?></textarea>
+                    ><?php echo rex_escape($body); ?></textarea>
                     <div><i><?php echo $this->i18n('be_password_mail_placeholder') ?> {{url}}</i></div>
                 </div>
                 <div class="form-group">
