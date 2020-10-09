@@ -3,15 +3,16 @@ if ($success != '') {
     echo '<div class="rex-js-login-message">' . rex_view::success($success) . "</div>";
 }
 
-if ($error != '') {
-    echo '<div class="rex-js-login-message">' . rex_view::error($error) . "</div>";
-}
-
 if ($success == '') {
 
     $email = rex_request('email', 'string');
 
     $content = '';
+
+    if ($error != '') {
+        $content .= '<div class="rex-js-login-message">' . rex_view::error($error) . "</div>";
+    }
+
     $content .= '<fieldset>';
 
     $formElements = [];
@@ -40,11 +41,11 @@ if ($success == '') {
 
     $formElements = [];
     $n = [];
-    $n['field'] = '<button class="btn btn-primary" type="submit">Senden</button>';
+    $n['field'] = '<a class="btn btn-link be_password_cancel" href="' . rex_url::currentBackendPage() . '">Abbrechen</a>';
     $formElements[] = $n;
 
     $n = [];
-    $n['field'] = '<a class="btn btn-link be_password_cancel" href="' . rex_url::currentBackendPage() . '">Abbrechen</a>';
+    $n['field'] = '<button class="btn btn-primary btn-block" type="submit">Senden</button>';
     $formElements[] = $n;
 
     $fragment = new rex_fragment();
