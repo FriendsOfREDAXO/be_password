@@ -10,12 +10,12 @@ var BePassHandler = (function () {
         }
         if (undefined == form) {
             $.get(url, function (dat) {
-                $("#rex-js-page-main").html(dat);
+                $("#rex-form-login").html(updateFormElements(dat));
                 applyHandlers("#rex-js-page-main .has-handler");
             });
         } else {
             $.post(url, $(form).serialize(), function (dat) {
-                $("#rex-js-page-main").html(dat);
+                $("#rex-form-login").html(updateFormElements(dat));
                 applyHandlers("#rex-js-page-main .has-handler");
             });
         }
@@ -38,13 +38,13 @@ var BePassHandler = (function () {
         }
         if (undefined == form) {
             $.get(url, function (dat) {
-                $("#rex-js-page-main").html(dat);
+                $("#rex-form-login").html(updateFormElements(dat));
                 applyHandlers("#rex-js-page-main .has-handler");
             });
         } else {
             var pw = $(form).find('input[name="password"]').val();
             $.post(url, {pw: pw}, function (dat) {
-                $("#rex-js-page-main").html(dat);
+                $("#rex-js-page-main").html(updateFormElements(dat));
                 applyHandlers("#rex-js-page-main .has-handler");
             });
         }
@@ -71,6 +71,17 @@ $(function () {
         });
     }
 });
+
+function updateFormElements(content) {
+    content = $(content);
+    // select branding element on current login form and inject into our form
+    content.find(".panel-body").prepend($(".rex-branding", "#rex-form-login"));
+    // if there is no panel heading (R 5.12+), we don’t use ours either
+    if (!$(".panel-heading", "#rex-form-login").length) {
+        content.find(".panel-heading").remove();
+    }
+    return content;
+}
 
 function applyHandlers(selector) {
     var $ = jQuery; // Innerhalb von WP sonst nicht bekannt
