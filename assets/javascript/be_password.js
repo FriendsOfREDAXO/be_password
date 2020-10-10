@@ -15,6 +15,7 @@ var BePassHandler = (function () {
             });
         } else {
             $.post(url, $(form).serialize(), function (dat) {
+                $(".rex-js-login-message").remove();
                 $("#rex-form-login").html(updateFormElements(dat));
                 applyHandlers("#rex-js-page-main .has-handler");
             });
@@ -44,7 +45,7 @@ var BePassHandler = (function () {
         } else {
             var pw = $(form).find('input[name="password"]').val();
             $.post(url, {pw: pw}, function (dat) {
-                $("#rex-js-page-main").html(updateFormElements(dat));
+                $("#rex-form-login").html(updateFormElements(dat));
                 applyHandlers("#rex-js-page-main .has-handler");
             });
         }
