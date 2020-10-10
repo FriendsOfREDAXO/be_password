@@ -1,17 +1,30 @@
 <?php
-if ($success != '') {
-    echo '<div class="rex-js-login-message">' . rex_view::success($success) . "</div>";
+// check for new login page that comes with fragment for background image
+$isNewLoginPage = file_exists(rex_path::core('fragments/core/login_background.php'));
+
+$email = rex_request('email', 'string');
+$content = '';
+
+
+if (!empty($success)) {
+    $successMessage = '<div class="rex-js-login-message">' . rex_view::success($success) . '</div>';
 }
 
-if ($success == '') {
+if (!empty($error)) {
+    $errorMessage = '<div class="rex-js-login-message">' . rex_view::error($error) . '</div>';
+}
 
-    $email = rex_request('email', 'string');
+if (!$isNewLoginPage) {
+    echo $successMessage;
+    echo $errorMessage;
+}
+else {
+    $content .= $successMessage;
+    $content .= $errorMessage;
+}
 
-    $content = '';
 
-    if ($error != '') {
-        $content .= '<div class="rex-js-login-message">' . rex_view::error($error) . "</div>";
-    }
+if (empty($success)) {
 
     $content .= '<fieldset>';
 
@@ -51,24 +64,27 @@ if ($success == '') {
     $fragment = new rex_fragment();
     $fragment->setVar('elements', $formElements, false);
     $buttons = $fragment->parse('core/form/submit.php');
+}
+
+if (!(!empty($success) && !$isNewLoginPage)) {
 
     $fragment = new rex_fragment();
     $fragment->setVar('title', 'Passwort zurücksetzen', false);
     $fragment->setVar('body', $content, false);
     $fragment->setVar('buttons', $buttons, false);
     $content = $fragment->parse('core/page/section.php');
-
-    $content = '
-        <form class="has-handler" data-handler="submit:BePassHandler:showForm" method="post">
-            ' . $content . '
-        </form>
-        <script>
-            (function() {
-                var inputField = $("#be_password_email_input");
-                var initialValue = inputField.val();
-                inputField.val("").val(initialValue).focus(); // focus with trailing caret
-            }());
-        </script>';
-
-    echo $content;
 }
+
+$content = '
+    <form class="has-handler" data-handler="submit:BePassHandler:showForm" method="post">
+        ' . $content . '
+    </form>
+    <script>
+        (function() {
+            var inputField = $("#be_password_email_input");
+            var initialValue = inputField.val();
+            inputField.val("").val(initialValue).focus(); // focus with trailing caret
+        }());
+    </script>';
+
+echo $content;

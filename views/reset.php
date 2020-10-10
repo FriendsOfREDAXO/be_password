@@ -1,17 +1,31 @@
 <?php
-if ($success != '') {
-    echo '<div class="rex-js-login-message">' . rex_view::success($success) . "</div>";
+// check for new login page that comes with fragment for background image
+$isNewLoginPage = file_exists(rex_path::core('fragments/core/login_background.php'));
+
+$email = rex_request('email', 'string');
+$content = '';
+
+
+if (!empty($success)) {
+    $successMessage = '<div class="rex-js-login-message">' . rex_view::success($success) . '</div>';
 }
 
-if ($error != '') {
-    echo '<div class="rex-js-login-message">' . rex_view::error($error) . "</div>";
+if (!empty($error)) {
+    $errorMessage = '<div class="rex-js-login-message">' . rex_view::error($error) . '</div>';
 }
 
-if ($success == '' || $showForm == true) {
+if (!$isNewLoginPage) {
+    echo $successMessage;
+    echo $errorMessage;
+}
+else {
+    $content .= $successMessage;
+    $content .= $errorMessage;
+}
 
-    $email = rex_request('email', 'string');
 
-    $content = '';
+if (empty($success) || $showForm === true) {
+
     $content .= '<fieldset>';
 
     $formElements = [];
@@ -50,22 +64,25 @@ if ($success == '' || $showForm == true) {
     $fragment = new rex_fragment();
     $fragment->setVar('elements', $formElements, false);
     $buttons = $fragment->parse('core/form/submit.php');
+}
+
+if (!(!empty($success) && !$isNewLoginPage) || $showForm === true) {
 
     $fragment = new rex_fragment();
     $fragment->setVar('title', 'Neues Passwort festlegen', false);
     $fragment->setVar('body', $content, false);
     $fragment->setVar('buttons', $buttons, false);
     $content = $fragment->parse('core/page/section.php');
-
-    $content = '
-        <form class="has-handler" data-handler="submit:BePassHandler:showReset" data-token="' . $token . '" method="post">
-            ' . $content . '
-        </form>
-        <script>
-            (function() {
-                $("#be_password_password_input").focus();
-            }());
-        </script>';
-
-    echo $content;
 }
+
+$content = '
+    <form class="has-handler" data-handler="submit:BePassHandler:showReset" data-token="' . $token . '" method="post">
+        ' . $content . '
+    </form>
+    <script>
+        (function() {
+            $("#be_password_password_input").focus();
+        }());
+    </script>';
+
+echo $content;
