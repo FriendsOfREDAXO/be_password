@@ -8,5 +8,5 @@ requires:
     packages:
         phpmailer: ^2
 page:
-    title: 'Passwort zurücksetzen'  
+    title: 'Passwort zurücksetzen'
     perm: admin
