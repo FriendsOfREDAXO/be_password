@@ -13,7 +13,9 @@ class DefaultController
         $rs = new \BePassword\Services\RenderService();
 
         return $rs->render(
-            'views/index.php', array());
+            'views/index.php',
+            array()
+        );
     }
 
     public function formAction()
@@ -70,11 +72,12 @@ class DefaultController
         }
 
         return $rs->render(
-            'views/form.php', array(
+            'views/form.php',
+            array(
             'error' => $error,
             'success' => $success,
-        ));
-
+        )
+        );
     }
 
     public function resetAction()
@@ -127,13 +130,14 @@ class DefaultController
             $db->setWhere(array('user_id' => $user_id));
             $db->delete();
             $success = 'Passwort wurde gesetzt. Weiter zum <a href="' . \rex_url::currentBackendPage() . '">Login</a>.';
-
         }
         return $render_service->render(
-            'views/reset.php', array(
+            'views/reset.php',
+            array(
             'error' => $error,
             'success' => $success,
             'token' => $token,
-        ));
+        )
+        );
     }
 }
