@@ -1,0 +1,21 @@
+be_password = Passwort zurücksetzen
+
+be_password_email = E-Mailadresse
+be_password_password = Passwort
+
+be_password_send = Senden
+be_password_cancel = Abbrechen
+
+be_password_forgot_password = Passwort vergessen?
+be_password_reset_password = Passwort zurücksetzen
+be_password_select_new_password = Neues Passwort festlegen
+
+be_password_mail_title = Passwort für REDAXO zurücksetzen
+be_password_mail_text = <p>Um das Passwort zurückzusetzen, rufen Sie bitte folgenden Link im Browser auf: <br><a href="{0}">{0}</a></p>
+
+be_password_error_token = Der Link zum Zurücksetzen ist leider nicht mehr gültig. Bitte erneut anfordern.
+be_password_error_server = E-Mail konnte nicht gesendet werden.
+
+be_password_success_mail = Eine E-Mail mit Informationen zum Zurücksetzen des Passworts wurde versendet, sofern das angegebene Benutzerkonto im System existiert.
+be_password_success_new_password = Das neue Passwort wurde gesetzt.
+be_password_success_go_to_login = Weiter zum Login
