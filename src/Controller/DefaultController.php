@@ -5,6 +5,7 @@ namespace BePassword\Controller;
 use BePassword\Services\RenderService;
 use BePassword\Services\FilterService;
 use BePassword\Services\RandomService;
+use rex_i18n;
 
 class DefaultController
 {
@@ -32,11 +33,15 @@ class DefaultController
                 $_POST['email'],
             ));
             if (!is_array($rows) || 0 == count($rows)) {
-                $error = 'Kein Account gefunden';
+                // Kein Account gefunden
+                // Aus Datenschutzgründen zeigen wir trotzdem eine Erfolgsmeldung
+                $success = rex_i18n::msg('be_password_success_mail');
             } elseif (1 < count($rows)) {
-                $error = 'Mehrere Accounts mit der gleichen Emailadresse vorhanden';
+                // Mehrere Accounts mit der gleichen Emailadresse vorhanden
+                // Aus Datenschutzgründen zeigen wir trotzdem eine Erfolgsmeldung
+                $success = rex_i18n::msg('be_password_success_mail');
             }
-            if ('' == $error) {
+            if ('' == $success) {
                 $row = $rows[0];
                 $user_id = $row['id'];
                 // Entferne alle bisherigen reset-tokens für diesen user
@@ -50,23 +55,22 @@ class DefaultController
                 $body = $rs->render('views/mail_reset_link.php', array(
                     'url' => $url,
                 ));
-                $subject = \rex_config::get('be_password', 'mail_subject_de');
+                $subject = rex_i18n::msg('be_password_mail_title');
                 $mail = new \rex_mailer();
-                $mail->Body = \rex_config::get('be_password', 'mail_body_html_de');
-                $mail->Body = str_replace('{{url}}', $url, $mail->Body);
+                $mail->Body = rex_i18n::rawMsg('be_password_mail_text', $url);
                 $mail->AltBody = strip_tags($mail->Body);
                 $mail->Subject = $subject;
                 $mail->AddAddress($row['email'], '');
                 $res = $mail->Send();
                 if (false === $res) {
-                    $error = 'E-Mail konnte nicht gesendet werden';
+                    $error = rex_i18n::msg('be_password_error_server');
                 } else {
                     $db->setTable(\rex::getTable('user_passwordreset'));
                     $db->setValue('reset_password_token_expires', date("Y-m-d H:i:s", time() + 3600))
                         ->setValue('user_id', $user_id)
                         ->setValue('reset_password_token', $token);
                     $db->insert();
-                    $success = 'Link zum setzen des neuen Passworts wurde gesendet';
+                    $success = rex_i18n::msg('be_password_success_mail');
                 }
             }
         }
@@ -91,7 +95,7 @@ class DefaultController
         $pw = \rex_request::post('pw');
 
         $db = \rex_sql::factory();
-        $sql = "SELECT * 
+        $sql = "SELECT *
             FROM `" . \rex::getTable('user_passwordreset') . "`
             WHERE reset_password_token=?
             AND reset_password_token_expires>?";
@@ -100,7 +104,7 @@ class DefaultController
             date("Y-m-d H:i:s", time()),
         ));
         if (!is_array($rows) || 1 != count($rows)) {
-            $error = 'Dieser Reset-Token ist nicht mehr gültig.';
+            $error = rex_i18n::msg('be_password_error_token');
         } else {
             $user_id = $rows[0]['user_id'];
         }
@@ -129,7 +133,7 @@ class DefaultController
             $db->setTable(\rex::getTable('user_passwordreset'));
             $db->setWhere(array('user_id' => $user_id));
             $db->delete();
-            $success = 'Passwort wurde gesetzt. Weiter zum <a href="' . \rex_url::currentBackendPage() . '">Login</a>.';
+            $success = rex_i18n::msg('be_password_success_new_password') . ' <a href="' . \rex_url::currentBackendPage() . '">' . rex_i18n::msg('be_password_success_go_to_login') . '</a>.';
         }
         return $render_service->render(
             'views/reset.php',
