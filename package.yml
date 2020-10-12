@@ -7,6 +7,3 @@ requires:
     redaxo: ^5.1.0
     packages:
         phpmailer: ^2
-page:
-    title: 'Passwort zurücksetzen'
-    perm: admin
