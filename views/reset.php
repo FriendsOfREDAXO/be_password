@@ -41,7 +41,7 @@ if (empty($success) || $showForm === true) {
     $inputGroup = $fragment->parse('core/form/input_group.php');
 
     $n = [];
-    $n['label'] = '<label for="be_password_password_input">Passwort:</label>';
+    $n['label'] = '<label for="be_password_password_input">' . rex_i18n::msg('be_password_password') . ':</label>';
     $n['field'] = $inputGroup;
     $n['class'] = 'rex-form-group-vertical';
     $formElements[] = $n;
@@ -54,11 +54,11 @@ if (empty($success) || $showForm === true) {
 
     $formElements = [];
     $n = [];
-    $n['field'] = '<button class="btn btn-primary" type="submit">Senden</button>';
+    $n['field'] = '<button class="btn btn-primary" type="submit">' . rex_i18n::msg('be_password_send') . '</button>';
     $formElements[] = $n;
 
     $n = [];
-    $n['field'] = '<a class="btn btn-link be_password_cancel" href="' . rex_url::currentBackendPage() . '">Abbrechen</a>';
+    $n['field'] = '<a class="btn btn-link be_password_cancel" href="' . rex_url::currentBackendPage() . '">' . rex_i18n::msg('be_password_cancel') . '</a>';
     $formElements[] = $n;
 
     $fragment = new rex_fragment();
@@ -69,7 +69,7 @@ if (empty($success) || $showForm === true) {
 if (!(!empty($success) && !$isNewLoginPage) || $showForm === true) {
 
     $fragment = new rex_fragment();
-    $fragment->setVar('title', 'Neues Passwort festlegen', false);
+    $fragment->setVar('title', rex_i18n::msg('be_password_select_new_password'), false);
     $fragment->setVar('body', $content, false);
     $fragment->setVar('buttons', $buttons, false);
     $content = $fragment->parse('core/page/section.php');
