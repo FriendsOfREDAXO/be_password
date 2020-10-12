@@ -1,7 +1,7 @@
 # Changelog
 
 
-## [2.0.0](https://github.com/FriendsOfREDAXO/be_password/releases/tag/2.0.0) – XX.XX.XXXX
+## [2.0.0](https://github.com/FriendsOfREDAXO/be_password/releases/tag/2.0.0) – 12.10.2020
 
 ### Breaking Changes
 
