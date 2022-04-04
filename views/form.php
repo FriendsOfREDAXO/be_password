@@ -3,7 +3,7 @@
 $isNewLoginPage = file_exists(rex_path::core('fragments/core/login_background.php'));
 
 $email = rex_request('email', 'string');
-$content = $successMessage = $errorMessage = '';
+$content = $successMessage = $errorMessage = $buttons = '';
 
 
 if (!empty($success)) {
