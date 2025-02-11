@@ -106,11 +106,9 @@ class BePassword
 
         // Prüfe Passwort-Regeln
         if ('' == $error && !empty($pw)) {
-            if (class_exists('\rex_backend_password_policy')) {
-                if (true !== $msg = \rex_backend_password_policy::factory(\rex::getProperty('password_policy', []))->check($pw, $user_id)) {
-                    $error = $msg;
-                    $showForm = true;
-                }
+            if (true !== $msg = \rex_backend_password_policy::factory(\rex::getProperty('password_policy', []))->check($pw, $user_id)) {
+                $error = $msg;
+                $showForm = true;
             }
         }
 
