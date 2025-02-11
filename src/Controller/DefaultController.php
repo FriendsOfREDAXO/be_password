@@ -87,10 +87,8 @@ class DefaultController
     public function resetAction() :string
     {
         $render_service = new RenderService();
-        $filter_service = new FilterService();
         $error = '';
         $success = '';
-        $showForm = false;
         $token = rex_get('token', 'string', '');
         $pw = \rex_request::post('pw');
 
