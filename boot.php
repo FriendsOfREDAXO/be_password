@@ -23,10 +23,10 @@ rex_extension::register('PACKAGES_INCLUDED', function () {
     // mailer-klasse selbst laden... warum auch immer
     require_once __DIR__ . '/../phpmailer/lib/mailer.php';
     if (
-        isset($_GET['be_password_request'])
-        && 2 <= substr_count($_GET['be_password_request'], '/')
+        rex_get('be_password_request', 'string', '') !== ''
+        && 2 <= substr_count(rex_get('be_password_request', 'string', ''), '/')
     ) {
-        $a = explode('/', $_GET['be_password_request']);
+        $a = explode('/', rex_get('be_password_request', 'string', ''));
         $controller = ucfirst($a[1]);
         $action = $a[2] . 'Action';
         if (isset($a[3])) {
@@ -35,7 +35,7 @@ rex_extension::register('PACKAGES_INCLUDED', function () {
             $arg = '';
         }
         $controller_file = ucfirst($a[1]) . 'Controller.php';
-        $controller_class = 'BePassword\Controller\\' . ucfirst($a[1]) . 'Controller';
+        $controller_class = 'FriendsOfRedaxo\BePassword\Controller\\' . ucfirst($a[1]) . 'Controller';
         $c = new $controller_class();
         $content = $c->{$action}($arg);
         echo $content;

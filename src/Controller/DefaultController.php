@@ -1,17 +1,17 @@
 <?php
 
-namespace BePassword\Controller;
+namespace FriendsOfRedaxo\BePassword\Controller;
 
-use BePassword\Services\RenderService;
-use BePassword\Services\FilterService;
-use BePassword\Services\RandomService;
+use FriendsOfRedaxo\BePassword\Services\RenderService;
+use FriendsOfRedaxo\BePassword\Services\FilterService;
+use FriendsOfRedaxo\BePassword\Services\RandomService;
 use rex_i18n;
 
 class DefaultController
 {
-    public function indexAction()
+    public function indexAction() :string
     {
-        $rs = new \BePassword\Services\RenderService();
+        $rs = new \FriendsOfRedaxo\BePassword\Services\RenderService();
 
         return $rs->render(
             'views/index.php',
@@ -19,7 +19,7 @@ class DefaultController
         );
     }
 
-    public function formAction()
+    public function formAction() :string
     {
         $error = '';
         $success = '';
@@ -46,7 +46,7 @@ class DefaultController
                 $user_id = $row['id'];
                 // Entferne alle bisherigen reset-tokens für diesen user
                 $db = \rex_sql::factory();
-                $db->setTable(\rex::getTable('user_passwordreset'));
+                $db->setTable(\rex::getTable('be_password_reset'));
                 $db->setWhere(array('user_id' => $user_id));
                 $db->delete();
                 // Erzeuge neuen Token
@@ -65,7 +65,7 @@ class DefaultController
                 if (false === $res) {
                     $error = rex_i18n::msg('be_password_error_server');
                 } else {
-                    $db->setTable(\rex::getTable('user_passwordreset'));
+                    $db->setTable(\rex::getTable('be_password_reset'));
                     $db->setValue('reset_password_token_expires', date("Y-m-d H:i:s", time() + 3600))
                         ->setValue('user_id', $user_id)
                         ->setValue('reset_password_token', $token);
@@ -84,19 +84,19 @@ class DefaultController
         );
     }
 
-    public function resetAction()
+    public function resetAction() :string
     {
         $render_service = new RenderService();
         $filter_service = new FilterService();
         $error = '';
         $success = '';
         $showForm = false;
-        $token = isset($_GET['token']) ? $_GET['token'] : '';
+        $token = rex_get('token', 'string', '');
         $pw = \rex_request::post('pw');
 
         $db = \rex_sql::factory();
         $sql = "SELECT *
-            FROM `" . \rex::getTable('user_passwordreset') . "`
+            FROM `" . \rex::getTable('be_password_reset') . "`
             WHERE reset_password_token=?
             AND reset_password_token_expires>?";
         $rows = $db->getArray($sql, array(
@@ -130,7 +130,7 @@ class DefaultController
 
             // Lösche tokens
             $db = \rex_sql::factory();
-            $db->setTable(\rex::getTable('user_passwordreset'));
+            $db->setTable(\rex::getTable('be_password_reset'));
             $db->setWhere(array('user_id' => $user_id));
             $db->delete();
             $success = rex_i18n::msg('be_password_success_new_password') . ' <a href="' . \rex_url::currentBackendPage() . '">' . rex_i18n::msg('be_password_success_go_to_login') . '</a>.';

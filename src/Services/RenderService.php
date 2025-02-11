@@ -1,6 +1,6 @@
 <?php
 
-namespace BePassword\Services;
+namespace FriendsOfRedaxo\BePassword\Services;
 
 class RenderService
 {
@@ -14,7 +14,7 @@ class RenderService
         );
     }
 
-    public function render($__view, $__params = array())
+    public function render(string $__view, array $__params = array()) :string
     {
         foreach ($this->pathes as $__path) {
             if (file_exists($__path . '/' . $__view)) {
