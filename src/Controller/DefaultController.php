@@ -14,7 +14,7 @@ class DefaultController
         $rs = new \FriendsOfRedaxo\BePassword\Services\RenderService();
 
         return $rs->render(
-            'views/index.php',
+            'fragments/be_password/index.php',
             array()
         );
     }
@@ -52,7 +52,7 @@ class DefaultController
                 // Erzeuge neuen Token
                 $token = $rand->createToken(100);
                 $url = \rex::getServer() . 'redaxo/index.php?be_password_reset_token=' . $token;
-                $body = $rs->render('views/mail_reset_link.php', array(
+                $body = $rs->render('fragments/be_password/mail_reset_link.php', array(
                     'url' => $url,
                 ));
                 $subject = rex_i18n::msg('be_password_mail_title');
@@ -76,7 +76,7 @@ class DefaultController
         }
 
         return $rs->render(
-            'views/form.php',
+            'fragments/be_password/form.php',
             array(
             'error' => $error,
             'success' => $success,
@@ -134,7 +134,7 @@ class DefaultController
             $success = rex_i18n::msg('be_password_success_new_password') . ' <a href="' . \rex_url::currentBackendPage() . '">' . rex_i18n::msg('be_password_success_go_to_login') . '</a>.';
         }
         return $render_service->render(
-            'views/reset.php',
+            'fragments/be_password/reset.php',
             array(
             'error' => $error,
             'success' => $success,
