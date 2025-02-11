@@ -17,8 +17,7 @@ if (!empty($error)) {
 if (!$isNewLoginPage) {
     echo $successMessage;
     echo $errorMessage;
-}
-else {
+} else {
     $content .= $successMessage;
     $content .= $errorMessage;
 }
