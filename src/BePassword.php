@@ -63,9 +63,9 @@ class BePassword
                     $error = rex_i18n::msg('be_password_error_server');
                 } else {
                     $db->setTable(\rex::getTable('be_password_reset'));
-                    $db->setValue('reset_password_token_expires', date("Y-m-d H:i:s", time() + 3600))
+                    $db->setValue('token_expires', date("Y-m-d H:i:s", time() + 3600))
                         ->setValue('user_id', $user_id)
-                        ->setValue('reset_password_token', $token);
+                        ->setValue('token', $token);
                     $db->insert();
                     $success = rex_i18n::msg('be_password_success_mail');
                 }
@@ -92,8 +92,8 @@ class BePassword
         $db = \rex_sql::factory();
         $sql = "SELECT *
             FROM `" . \rex::getTable('be_password_reset') . "`
-            WHERE reset_password_token=?
-            AND reset_password_token_expires>?";
+            WHERE token=?
+            AND token_expires>?";
         $rows = $db->getArray($sql, array(
             $token,
             date("Y-m-d H:i:s", time()),
