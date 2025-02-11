@@ -1,17 +1,15 @@
 <?php
 
-namespace FriendsOfRedaxo\BePassword\Controller;
+namespace FriendsOfRedaxo\BePassword;
 
-use FriendsOfRedaxo\BePassword\Services\RenderService;
-use FriendsOfRedaxo\BePassword\Services\FilterService;
-use FriendsOfRedaxo\BePassword\Services\RandomService;
+use FriendsOfRedaxo\BePassword\Services\Render;
 use rex_i18n;
 
-class DefaultController
+class BePassword
 {
     public function indexAction() :string
     {
-        $rs = new \FriendsOfRedaxo\BePassword\Services\RenderService();
+        $rs = new \FriendsOfRedaxo\BePassword\Services\Render();
 
         return $rs->render(
             'fragments/be_password/index.php',
@@ -23,8 +21,7 @@ class DefaultController
     {
         $error = '';
         $success = '';
-        $rs = new RenderService();
-        $rand = new RandomService();
+        $rs = new Render();
 
         if (isset($_POST['email'])) {
             // Check if there is an account
@@ -50,7 +47,7 @@ class DefaultController
                 $db->setWhere(array('user_id' => $user_id));
                 $db->delete();
                 // Erzeuge neuen Token
-                $token = $rand->createToken(100);
+                $token = self::createToken();
                 $url = \rex::getServer() . 'redaxo/index.php?be_password_reset_token=' . $token;
                 $body = $rs->render('fragments/be_password/mail_reset_link.php', array(
                     'url' => $url,
@@ -86,7 +83,7 @@ class DefaultController
 
     public function resetAction() :string
     {
-        $render_service = new RenderService();
+        $render_service = new Render();
         $error = '';
         $success = '';
         $token = rex_get('token', 'string', '');
@@ -141,5 +138,10 @@ class DefaultController
             'token' => $token,
         )
         );
+    }
+    
+    public static function createToken() :string
+    {
+        return bin2hex(random_bytes(32));
     }
 }

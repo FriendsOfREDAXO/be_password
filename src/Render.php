@@ -2,7 +2,7 @@
 
 namespace FriendsOfRedaxo\BePassword\Services;
 
-class RenderService
+class Render
 {
     public $pathes;
     public $app;
@@ -10,7 +10,7 @@ class RenderService
     public function __construct()
     {
         $this->pathes = array(
-            __DIR__ . '/../../',
+            __DIR__ . '/..',
         );
     }
 
