@@ -4,18 +4,18 @@
 
 Ein wenig entrümpelt und aufgeräumt.
 
-### Breaking Changes
+### Breaking Changes in 2.1.0
 
-Namepsace, Klassen- und Methodennamen wurden verändert. Das sollte faktisch keine Auswirkungen haben, da diese ohnehin nur intern verwendet werden.
+Keine. Namespace, Klassen- und Methodennamen wurden verändert. Das sollte faktisch keine Auswirkungen haben, da diese ohnehin nur intern verwendet werden.
 
 ## [2.0.0](https://github.com/FriendsOfREDAXO/be_password/releases/tag/2.0.0) – 12.10.2020
 
-### Breaking Changes
+### Breaking Changes in 2.0.0
 
 * Konfigurationsseite im Backend entfernt [(#20)](https://github.com/FriendsOfREDAXO/be_password/issues/20)  
 Bitte beachten: Eine Anpassung des Textes der Bestätigungs-E-Mail ist damit leider nicht mehr ohne weiteres möglich.
 
-### Features
+### Features in 2.0.0
 
 * Kompatibilität mit neuer REX-Loginseite herstellen [(#21)](https://github.com/FriendsOfREDAXO/be_password/pull/21)
 * Datenschutz: Nicht erkennbar machen, dass ein Benutzerkonto existiert [(#14)](https://github.com/FriendsOfREDAXO/be_password/issues/14)
@@ -25,7 +25,7 @@ Bitte beachten: Eine Anpassung des Textes der Bestätigungs-E-Mail ist damit lei
 
 ## [1.1.0](https://github.com/FriendsOfREDAXO/be_password/releases/tag/1.1.0) – 23.10.2017
 
-### Features
+### Features in 1.1.0
 
 * Passwortregeln beachten (REX 5.4) [(#9)](https://github.com/FriendsOfREDAXO/be_password/issues/9)
 
