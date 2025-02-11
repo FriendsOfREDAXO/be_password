@@ -27,14 +27,12 @@ rex_extension::register('PACKAGES_INCLUDED', function () {
         && 2 <= substr_count(rex_get('be_password_request', 'string', ''), '/')
     ) {
         $a = explode('/', rex_get('be_password_request', 'string', ''));
-        $controller = ucfirst($a[1]);
         $action = $a[2] . 'Action';
         if (isset($a[3])) {
             $arg = $a[3];
         } else {
             $arg = '';
         }
-        $controller_file = ucfirst($a[1]) . 'Controller.php';
         $controller_class = 'FriendsOfRedaxo\BePassword\Controller\\' . ucfirst($a[1]) . 'Controller';
         $c = new $controller_class();
         $content = $c->{$action}($arg);
