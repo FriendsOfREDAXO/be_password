@@ -20,8 +20,8 @@ The be_password addon is a REDAXO CMS extension that provides password reset fun
   - NEVER CANCEL: This validation is fast but critical for catching syntax errors
 - **Test individual services:**
   ```bash
-  php -r "require 'src/Services/RandomService.php'; $r = new BePassword\Services\RandomService(); echo $r->createToken(10);"
-  php -r "require 'src/Services/FilterService.php'; $f = new BePassword\Services\FilterService(); echo $f->filterEmail('test@example.com');"
+  php -r "require 'src/Services/RandomService.php'; \$r = new BePassword\Services\RandomService(); echo \$r->createToken(10);"
+  php -r "require 'src/Services/FilterService.php'; \$f = new BePassword\Services\FilterService(); echo \$f->filterEmail('test@example.com');"
   ```
 
 ### No Build Process Required
@@ -104,7 +104,7 @@ The be_password addon is a REDAXO CMS extension that provides password reset fun
 
 2. **Service Testing** (when modifying services):
    ```bash
-   php -r "require 'src/Services/RandomService.php'; $service = new BePassword\Services\RandomService(); var_dump($service->createToken(50));"
+   php -r "require 'src/Services/RandomService.php'; \$service = new BePassword\Services\RandomService(); var_dump(\$service->createToken(50));"
    ```
 
 3. **View Rendering** (when modifying templates):
