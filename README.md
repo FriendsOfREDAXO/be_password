@@ -27,6 +27,15 @@ Für das ordnungsgemäße Funktionieren dieses AddOns sind folgende Voraussetzun
 
 Sollte das AddOn nicht verfügbar sein oder der E-Mail-Versand nicht funktionieren, können Administratoren das Passwort auch über die REDAXO-Konsole zurücksetzen. Weitere Informationen dazu finden Sie in der [offiziellen REDAXO-Dokumentation](https://redaxo.org/doku/master/konsole).
 
----
+## Lizenz
+
+MIT Lizenz, siehe [LICENSE.md](https://github.com/alexplusde/neues/blob/master/LICENSE)  
+
+## Autor
+
+**Friends of REDAXO**
+
+## Credits
 
 Ursprünglich entwickelt von [@akuehnis](https://github.com/akuehnis).
+
