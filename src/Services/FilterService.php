@@ -21,10 +21,10 @@ class FilterService
         return str_replace($f, ' ', stripslashes($value));
     }
 
-    // depreciated
+    // deprecated
     public function filterTextarea($value)
     {
-        return filterText($value);
+        return $this->filterText($value);
     }
 
     public function filterInt($value)
