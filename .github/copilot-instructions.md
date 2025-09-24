@@ -164,10 +164,10 @@ The be_password addon is a REDAXO CMS extension that provides password reset fun
 find . -name "*.php" -exec php -l {} \;
 
 # Test RandomService 
-php -r "require 'src/Services/RandomService.php'; echo (new BePassword\Services\RandomService())->createToken(10);"
+php -r 'require "src/Services/RandomService.php"; echo (new BePassword\Services\RandomService())->createToken(10);'
 
 # Test FilterService
-php -r "require 'src/Services/FilterService.php'; echo (new BePassword\Services\FilterService())->filterEmail('test@domain.com');"
+php -r 'require "src/Services/FilterService.php"; echo (new BePassword\Services\FilterService())->filterEmail("test@domain.com");'
 ```
 
 ### File Structure Reference
