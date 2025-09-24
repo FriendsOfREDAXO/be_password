@@ -55,27 +55,39 @@ class DefaultController
                     $db->setWhere(array('user_id' => $user_id));
                     $db->delete();
                     // Erzeuge neuen Token
-                    $token = $rand->createToken(100);
-                    $url = \rex::getServer() . 'redaxo/index.php?be_password_reset_token=' . $token;
-                    $body = $rs->render('views/mail_reset_link.php', array(
-                        'url' => $url,
-                    ));
-                    $subject = rex_i18n::msg('be_password_mail_title');
-                    $mail = new \rex_mailer();
-                    $mail->Body = rex_i18n::rawMsg('be_password_mail_text', $url);
-                    $mail->AltBody = strip_tags($mail->Body);
-                    $mail->Subject = $subject;
-                    $mail->AddAddress($row['email'], '');
-                    $res = $mail->Send();
-                    if (false === $res) {
+                    try {
+                        $token = $rand->createToken(100);
+                    } catch (Exception $e) {
                         $error = rex_i18n::msg('be_password_error_server');
-                    } else {
-                        $db->setTable(\rex::getTable('user_passwordreset'));
-                        $db->setValue('reset_password_token_expires', date("Y-m-d H:i:s", time() + 3600))
-                            ->setValue('user_id', $user_id)
-                            ->setValue('reset_password_token', $token);
-                        $db->insert();
-                        $success = rex_i18n::msg('be_password_success_mail');
+                        $token = null;
+                    }
+                    
+                    if (null !== $token) {
+                        $url = \rex::getServer() . 'redaxo/index.php?be_password_reset_token=' . $token;
+                        $body = $rs->render('views/mail_reset_link.php', array(
+                            'url' => $url,
+                        ));
+                        $subject = rex_i18n::msg('be_password_mail_title');
+                        $mail = new \rex_mailer();
+                        $mail->Body = rex_i18n::rawMsg('be_password_mail_text', $url);
+                        $mail->AltBody = strip_tags($mail->Body);
+                        $mail->Subject = $subject;
+                        $mail->AddAddress($row['email'], '');
+                        $res = $mail->Send();
+                        if (false === $res) {
+                            $error = rex_i18n::msg('be_password_error_server');
+                        } else {
+                            try {
+                                $db->setTable(\rex::getTable('user_passwordreset'));
+                                $db->setValue('reset_password_token_expires', date("Y-m-d H:i:s", time() + 3600))
+                                    ->setValue('user_id', $user_id)
+                                    ->setValue('reset_password_token', $token);
+                                $db->insert();
+                                $success = rex_i18n::msg('be_password_success_mail');
+                            } catch (Exception $e) {
+                                $error = rex_i18n::msg('be_password_error_server');
+                            }
+                        }
                     }
                 }
             }
@@ -135,19 +147,23 @@ class DefaultController
 
         if ('' == $error && !empty($pw) && null !== $user_id) {
             // Setze passwort neu
-            $password = \rex_login::passwordHash($pw);
-            $db->setTable('rex_user');
-            $db->setWhere(array('id' => $user_id));
-            $db->setValue('password', $password);
-            $db->setValue('login_tries', 0);
-            $db->update();
+            try {
+                $password = \rex_login::passwordHash($pw);
+                $db->setTable('rex_user');
+                $db->setWhere(array('id' => $user_id));
+                $db->setValue('password', $password);
+                $db->setValue('login_tries', 0);
+                $db->update();
 
-            // Lösche tokens
-            $db = \rex_sql::factory();
-            $db->setTable(\rex::getTable('user_passwordreset'));
-            $db->setWhere(array('user_id' => $user_id));
-            $db->delete();
-            $success = rex_i18n::msg('be_password_success_new_password') . ' <a href="' . \rex_url::currentBackendPage() . '">' . rex_i18n::msg('be_password_success_go_to_login') . '</a>.';
+                // Lösche tokens
+                $db = \rex_sql::factory();
+                $db->setTable(\rex::getTable('user_passwordreset'));
+                $db->setWhere(array('user_id' => $user_id));
+                $db->delete();
+                $success = rex_i18n::msg('be_password_success_new_password') . ' <a href="' . \rex_url::currentBackendPage() . '">' . rex_i18n::msg('be_password_success_go_to_login') . '</a>.';
+            } catch (Exception $e) {
+                $error = rex_i18n::msg('be_password_error_server');
+            }
         }
         return $render_service->render(
             'views/reset.php',

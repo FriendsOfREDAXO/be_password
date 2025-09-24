@@ -1,14 +1,15 @@
 var BePassHandler = (function () {
-    var H = {}
+    var H = {};
 
     H.showForm = function () {
         var url = 'index.php?be_password_request=/default/form';
-        if ('FORM' == this.tagName) {
-            var form = this;
+        var form;
+        if ('FORM' === this.tagName) {
+            form = this;
         } else {
-            var form = undefined;
+            form = undefined;
         }
-        if (undefined == form) {
+        if (undefined === form) {
             $.get(url, function (dat) {
                 $("#rex-form-login").html(updateFormElements(dat));
                 applyHandlers("#rex-js-page-main .has-handler");
@@ -21,23 +22,25 @@ var BePassHandler = (function () {
             });
         }
         return false;
-    }
+    };
 
 
     H.showReset = function (args) {
-        if (undefined == args.token) {
-            var token = $(this).attr('data-token');
+        var token;
+        if (undefined === args.token) {
+            token = $(this).attr('data-token');
         } else {
-            var token = args.token;
+            token = args.token;
         }
         var url = 'index.php?be_password_request=/default/reset' +
-            '&token=' + token;
-        if ('FORM' == this.tagName) {
-            var form = this;
+            '&token=' + encodeURIComponent(token);
+        var form;
+        if ('FORM' === this.tagName) {
+            form = this;
         } else {
-            var form = undefined;
+            form = undefined;
         }
-        if (undefined == form) {
+        if (undefined === form) {
             $.get(url, function (dat) {
                 $("#rex-form-login").html(updateFormElements(dat));
                 applyHandlers("#rex-js-page-main .has-handler");
@@ -50,18 +53,19 @@ var BePassHandler = (function () {
             });
         }
         return false;
-    }
+    };
 
     return H;
 
 })();
 $(function () {
     var token_name = 'be_password_reset_token=';
-    if (-1 != location.href.indexOf(token_name)) {
+    if (-1 !== location.href.indexOf(token_name)) {
         var a = location.search.substr(1).split('&');
+        var token;
         for (var i = 0; i < a.length; i++) {
-            if (0 == a[i].indexOf(token_name)) {
-                var token = a[i].replace(token_name, '');
+            if (0 === a[i].indexOf(token_name)) {
+                token = a[i].replace(token_name, '');
             }
         }
         BePassHandler.showReset({token: token});

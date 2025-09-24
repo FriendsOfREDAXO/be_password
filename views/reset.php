@@ -32,7 +32,7 @@ if (empty($success) || $showForm === true) {
 
     $inputGroups = [];
     $n = [];
-    $n['field'] = '<input class="form-control" type="password" value="' . htmlspecialchars($email) . '" id="be_password_password_input" name="password" />';
+    $n['field'] = '<input class="form-control" type="password" value="" id="be_password_password_input" name="password" />';
     $n['left'] = '<i class="rex-icon rex-icon-password"></i>';
     $inputGroups[] = $n;
 
