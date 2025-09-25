@@ -203,24 +203,19 @@ class DefaultController
     
     /**
      * Check if rate limit is exceeded
-     * @return bool
      */
-    private function checkRateLimit()
+    private function checkRateLimit(): bool
     {
         $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
         $sessionKey = 'be_password_rate_limit_' . md5($ip);
         
-        if (!isset($_SESSION[$sessionKey])) {
-            $_SESSION[$sessionKey] = [];
-        }
+        $_SESSION[$sessionKey] ??= [];
         
         $requests = $_SESSION[$sessionKey];
         $now = time();
         
         // Clean old requests
-        $requests = array_filter($requests, function($timestamp) use ($now) {
-            return ($now - $timestamp) < self::RATE_LIMIT_WINDOW;
-        });
+        $requests = array_filter($requests, fn($timestamp) => ($now - $timestamp) < self::RATE_LIMIT_WINDOW);
         
         // Check if limit exceeded
         if (count($requests) >= self::RATE_LIMIT_REQUESTS) {
@@ -236,14 +231,13 @@ class DefaultController
     
     /**
      * Get wait time in minutes for rate limit
-     * @return int
      */
-    private function getRateLimitWaitTime()
+    private function getRateLimitWaitTime(): int
     {
         $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
         $sessionKey = 'be_password_rate_limit_' . md5($ip);
         
-        if (!isset($_SESSION[$sessionKey]) || empty($_SESSION[$sessionKey])) {
+        if (empty($_SESSION[$sessionKey])) {
             return 0;
         }
         
@@ -257,9 +251,9 @@ class DefaultController
      * Add consistent timing delay to prevent timing attacks
      * This ensures all password reset requests take the same amount of time
      */
-    private function addTimingDelay()
+    private function addTimingDelay(): void
     {
         // Add a consistent delay between 100ms and 300ms
-        usleep(rand(100000, 300000));
+        usleep(random_int(100_000, 300_000));
     }
 }
