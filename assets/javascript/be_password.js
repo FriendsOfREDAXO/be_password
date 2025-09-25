@@ -47,12 +47,7 @@ var BePassHandler = (function () {
             });
         } else {
             var pw = $(form).find('input[name="password"]').val();
-            var csrfToken = $(form).find('input[name="_csrf_token"]').val();
-            var postData = {pw: pw};
-            if (csrfToken) {
-                postData._csrf_token = csrfToken;
-            }
-            $.post(url, postData, function (dat) {
+            $.post(url, {pw: pw}, function (dat) {
                 $("#rex-form-login").html(updateFormElements(dat));
                 applyHandlers("#rex-js-page-main .has-handler");
             });

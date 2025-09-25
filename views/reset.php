@@ -77,7 +77,6 @@ if (!(!empty($success) && !$isNewLoginPage) || $showForm === true) {
 
 $content = '
     <form class="has-handler" data-handler="submit:BePassHandler:showReset" data-token="' . $token . '" method="post">
-        ' . (isset($csrf_token) ? $csrf_token->getHiddenField() : '') . '
         ' . $content . '
     </form>
     <script>
