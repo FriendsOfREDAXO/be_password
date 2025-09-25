@@ -1,7 +1,7 @@
 <?php
 spl_autoload_register(function ($class) {
-    $prefix = 'BePassword';
-    $base_dir = dirname(__FILE__) . '/src';
+    $prefix = 'FriendsOfRedaxo\BePassword';
+    $base_dir = dirname(__FILE__) . '/lib';
 
     $len = strlen($prefix);
     if (strncmp($prefix, $class, $len) !== 0) {
@@ -38,7 +38,7 @@ rex_extension::register('PACKAGES_INCLUDED', function () {
         
         $arg = isset($a[3]) ? $a[3] : '';
         $controller_file = $controller . 'Controller.php';
-        $controller_class = 'BePassword\Controller\\' . $controller . 'Controller';
+        $controller_class = 'FriendsOfRedaxo\BePassword\Controller\\' . $controller . 'Controller';
         
         // Check if class exists before instantiation
         if (class_exists($controller_class)) {

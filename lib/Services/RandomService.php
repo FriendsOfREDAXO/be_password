@@ -1,6 +1,6 @@
 <?php
 
-namespace BePassword\Services;
+namespace FriendsOfRedaxo\BePassword\Services;
 class RandomService
 {
     public function createToken($length = 100)

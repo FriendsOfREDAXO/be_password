@@ -1,10 +1,10 @@
 <?php
 
-namespace BePassword\Controller;
+namespace FriendsOfRedaxo\BePassword\Controller;
 
-use BePassword\Services\RenderService;
-use BePassword\Services\FilterService;
-use BePassword\Services\RandomService;
+use FriendsOfRedaxo\BePassword\Services\RenderService;
+use FriendsOfRedaxo\BePassword\Services\FilterService;
+use FriendsOfRedaxo\BePassword\Services\RandomService;
 use rex_i18n;
 
 class DefaultController
@@ -14,7 +14,7 @@ class DefaultController
     
     public function indexAction()
     {
-        $rs = new \BePassword\Services\RenderService();
+        $rs = new \FriendsOfRedaxo\BePassword\Services\RenderService();
 
         return $rs->render(
             'views/index.php',
