@@ -16,6 +16,7 @@ be_password_mail_text = <p>Um das Passwort zurückzusetzen, rufen Sie bitte folg
 be_password_error_token = Der Link zum Zurücksetzen ist leider nicht mehr gültig. Bitte erneut anfordern.
 be_password_error_server = E-Mail konnte nicht gesendet werden.
 be_password_error_invalid_email = Bitte geben Sie eine gültige E-Mail-Adresse ein.
+be_password_error_csrf = Sicherheitsfehler. Bitte versuchen Sie es erneut.
 be_password_error_rate_limit = Zu viele Anfragen. Bitte warten Sie {0} Minuten bevor Sie es erneut versuchen.
 
 be_password_success_mail = Eine E-Mail mit Informationen zum Zurücksetzen des Passworts wurde versendet, sofern das angegebene Benutzerkonto im System existiert.
