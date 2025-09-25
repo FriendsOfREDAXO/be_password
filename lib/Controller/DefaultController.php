@@ -139,9 +139,12 @@ class DefaultController
         
         $pw = \rex_request::post('pw');
         
-        // Validate CSRF token if password is being submitted
-        if (!empty($pw) && !$csrf_token->isValid()) {
-            $error = rex_i18n::msg('be_password_error_csrf');
+        // Validate CSRF token only if password is being submitted via POST
+        // Skip CSRF validation for GET requests (initial form display)
+        if (!empty($pw) && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (!$csrf_token->isValid()) {
+                $error = rex_i18n::msg('be_password_error_csrf');
+            }
         }
 
         $db = \rex_sql::factory();
