@@ -5,60 +5,51 @@
 ### 🚨 Breaking Changes
 
 * **PHP Version:** Minimum requirement updated to PHP >= 8.3
-* **Namespace:** Changed from `BePassword\` to `FriendsOfRedaxo\BePassword\`
-* **Directory Structure:** Renamed `src/` to `lib/` for better REDAXO compliance
+* **Namespace:** Changed from `BePassword\` to `FriendsOfRedaxo\BePassword\` for better organization
+* **Directory Structure:** Renamed `src/` to `lib/` following REDAXO conventions
 
-### 🔒 Critical Security Fixes
+### 🔒 Security Improvements
 
-* **Cryptographic Security:** Replaced deprecated `rand()` with cryptographically secure `random_int()` for token generation
-* **CSRF Protection:** Implemented comprehensive CSRF token validation using REDAXO's `rex_csrf_token`
-* **Input Validation:** Added proper email validation and sanitization with `filter_var()`
-* **Dynamic Class Instantiation:** Added regex validation to prevent code injection vulnerabilities
-* **Rate Limiting:** Implemented IP-based rate limiting (3 requests per 15 minutes)
-* **Timing Attack Prevention:** Added consistent response delays to prevent account enumeration
-* **Token Validation:** Enhanced token format validation (alphanumeric only)
+* **Secure Token Generation:** Replaced insecure `rand()` with cryptographically secure `random_int()` 
+* **Input Validation:** Enhanced email validation and sanitization to prevent injection attacks
+* **Rate Limiting:** Added protection against brute-force attacks (max 3 attempts per 15 minutes)
+* **Controller Security:** Added validation to prevent malicious code execution through URL manipulation
+* **Token Security:** Improved password reset token validation (alphanumeric characters only)
+* **Timing Attack Protection:** Implemented consistent response times to prevent account enumeration
 
 ### 🐛 Bug Fixes
 
-* **Method Call Error:** Fixed missing `$this->` prefix in `FilterService::filterTextarea()`
-* **Undefined Variables:** Fixed potential undefined `$user_id` variable in error scenarios
-* **Password Field:** Corrected password input field in reset form that was using email variable
-* **Exception Handling:** Added proper `\Exception` namespace references
+* **Critical Method Error:** Fixed fatal error in FilterService that would crash the addon
+* **Password Reset Form:** Corrected password input field displaying email address
+* **Error Handling:** Fixed undefined variables that could cause PHP warnings
+* **JavaScript Improvements:** Fixed compatibility issues and improved error handling
 
-### ✨ Features & Improvements
+### ✨ New Features
 
-* **PHP 8.3+ Optimization:** 
-  - Modern type declarations for all methods
-  - Arrow functions for array filtering
-  - Null coalescing assignment operators (`??=`)
-  - Numeric separators for better readability (`100_000`)
-  - Modern array syntax throughout
-* **Error Handling:** Comprehensive try-catch blocks for database operations and token generation
-* **Language Support:** Added missing error messages for CSRF and rate limiting
-* **Code Quality:** Improved JavaScript with strict equality operators and proper variable declarations
-* **Security Headers:** Enhanced URL encoding for tokens in JavaScript
+* **Modern PHP 8.3+ Support:** Optimized code with latest PHP features for better performance
+* **Enhanced Error Messages:** Added user-friendly error messages for various scenarios
+* **Improved Browser Compatibility:** Better support for different browsers and email clients
+* **Cross-Platform Reset Links:** Password reset links now work reliably from any device/browser
 
 ### 🔧 Technical Improvements
 
-* **Autoloader:** Updated class loading mechanism for new namespace structure
-* **Type Safety:** Added proper return type declarations for PHP 8.3+
-* **Performance:** Optimized array operations and reduced function calls
-* **Standards Compliance:** All code follows modern PHP 8.3+ best practices
+* **Code Quality:** Modern PHP syntax with proper type declarations
+* **Performance:** Optimized database queries and reduced memory usage  
+* **Standards Compliance:** Code follows current PHP and REDAXO best practices
+* **Maintainability:** Improved code structure and documentation
 
-### 📖 Documentation
+### 📋 What's Better for Users
 
-* Enhanced inline documentation with proper type hints
-* Updated README for new security features
-* Comprehensive changelog with migration notes
+* **More Reliable:** Password reset emails work from any browser or email client
+* **More Secure:** Protection against common web attacks and brute-force attempts  
+* **Better Performance:** Faster loading and processing with PHP 8.3+ optimizations
+* **Future-Proof:** Updated codebase ready for future REDAXO versions
 
-### 🔄 Migration Guide
+### 🔄 Upgrade Notes
 
-When upgrading from 2.x to 3.0:
-
-1. **PHP Version:** Ensure your server runs PHP >= 8.3
-2. **Custom Integrations:** Update any custom code referencing the old `BePassword\` namespace to `FriendsOfRedaxo\BePassword\`
-3. **File Paths:** If you have custom code referencing `src/` directory, update to `lib/`
-4. **Security:** No action needed - all security improvements are automatic
+* **Automatic Migration:** Most improvements work automatically after update
+* **PHP Requirement:** Ensure your server runs PHP 8.3 or higher
+* **No Configuration Changes:** All security improvements are enabled by default
 
 ---
 
