@@ -9,6 +9,9 @@ use rex_i18n;
 
 class DefaultController
 {
+    private const RATE_LIMIT_REQUESTS = 3; // Max 3 requests
+    private const RATE_LIMIT_WINDOW = 900; // in 15 minutes (900 seconds)
+    
     public function indexAction()
     {
         $rs = new \BePassword\Services\RenderService();
@@ -25,18 +28,30 @@ class DefaultController
         $success = '';
         $rs = new RenderService();
         $rand = new RandomService();
+        
+        // Create CSRF token for form
+        $csrf_token = \rex_csrf_token::factory('be_password_form');
 
         if (isset($_POST['email'])) {
-            // Validate email format
-            $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $error = rex_i18n::msg('be_password_error_invalid_email');
+            // Validate CSRF token
+            if (!$csrf_token->isValid()) {
+                $error = rex_i18n::msg('be_password_error_csrf');
+            } elseif (!$this->checkRateLimit()) {
+                $error = rex_i18n::msg('be_password_error_rate_limit', $this->getRateLimitWaitTime());
             } else {
+                // Validate email format
+                $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+                if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    $error = rex_i18n::msg('be_password_error_invalid_email');
+                } else {
                 // Check if there is an account
                 $db = \rex_sql::factory();
                 $rows = $db->getArray("SELECT * FROM rex_user WHERE email=?", array(
                     $email,
                 ));
+                // Timing attack protection - add consistent delay
+                $this->addTimingDelay();
+                
                 if (!is_array($rows) || 0 == count($rows)) {
                     // Kein Account gefunden
                     // Aus Datenschutzgründen zeigen wir trotzdem eine Erfolgsmeldung
@@ -91,6 +106,7 @@ class DefaultController
                     }
                 }
             }
+            }
         }
 
         return $rs->render(
@@ -98,6 +114,7 @@ class DefaultController
             array(
             'error' => $error,
             'success' => $success,
+            'csrf_token' => $csrf_token,
         )
         );
     }
@@ -111,6 +128,9 @@ class DefaultController
         $showForm = false;
         $token = isset($_GET['token']) ? $_GET['token'] : '';
         
+        // Create CSRF token for reset form
+        $csrf_token = \rex_csrf_token::factory('be_password_reset');
+        
         // Validate token format - should be alphanumeric
         if (!empty($token) && !preg_match('/^[a-zA-Z0-9]+$/', $token)) {
             $error = rex_i18n::msg('be_password_error_token');
@@ -118,6 +138,11 @@ class DefaultController
         }
         
         $pw = \rex_request::post('pw');
+        
+        // Validate CSRF token if password is being submitted
+        if (!empty($pw) && !$csrf_token->isValid()) {
+            $error = rex_i18n::msg('be_password_error_csrf');
+        }
 
         $db = \rex_sql::factory();
         $sql = "SELECT *
@@ -171,7 +196,70 @@ class DefaultController
             'error' => $error,
             'success' => $success,
             'token' => $token,
+            'csrf_token' => $csrf_token,
         )
         );
+    }
+    
+    /**
+     * Check if rate limit is exceeded
+     * @return bool
+     */
+    private function checkRateLimit()
+    {
+        $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+        $sessionKey = 'be_password_rate_limit_' . md5($ip);
+        
+        if (!isset($_SESSION[$sessionKey])) {
+            $_SESSION[$sessionKey] = [];
+        }
+        
+        $requests = $_SESSION[$sessionKey];
+        $now = time();
+        
+        // Clean old requests
+        $requests = array_filter($requests, function($timestamp) use ($now) {
+            return ($now - $timestamp) < self::RATE_LIMIT_WINDOW;
+        });
+        
+        // Check if limit exceeded
+        if (count($requests) >= self::RATE_LIMIT_REQUESTS) {
+            return false;
+        }
+        
+        // Add current request
+        $requests[] = $now;
+        $_SESSION[$sessionKey] = $requests;
+        
+        return true;
+    }
+    
+    /**
+     * Get wait time in minutes for rate limit
+     * @return int
+     */
+    private function getRateLimitWaitTime()
+    {
+        $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+        $sessionKey = 'be_password_rate_limit_' . md5($ip);
+        
+        if (!isset($_SESSION[$sessionKey]) || empty($_SESSION[$sessionKey])) {
+            return 0;
+        }
+        
+        $oldestRequest = min($_SESSION[$sessionKey]);
+        $waitSeconds = self::RATE_LIMIT_WINDOW - (time() - $oldestRequest);
+        
+        return max(0, ceil($waitSeconds / 60));
+    }
+    
+    /**
+     * Add consistent timing delay to prevent timing attacks
+     * This ensures all password reset requests take the same amount of time
+     */
+    private function addTimingDelay()
+    {
+        // Add a consistent delay between 100ms and 300ms
+        usleep(rand(100000, 300000));
     }
 }
