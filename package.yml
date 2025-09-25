@@ -1,9 +1,10 @@
 package: be_password
-version: '2.0.1'
+version: '3.0.0'
 author: 'Friends Of REDAXO'
 supportpage: https://github.com/FriendsOfREDAXO/be_password
 
 requires:
-    redaxo: ^5.4.0
+    php: '>=8.3'
+    redaxo: ^5.18.1
     packages:
         phpmailer: ^2

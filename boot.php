@@ -1,18 +1,4 @@
-<?php
-spl_autoload_register(function ($class) {
-    $prefix = 'BePassword';
-    $base_dir = dirname(__FILE__) . '/src';
-
-    $len = strlen($prefix);
-    if (strncmp($prefix, $class, $len) !== 0) {
-        return;
-    }
-    $relative_class = substr($class, $len);
-    $file = $base_dir . str_replace('\\', '/', $relative_class) . '.php';
-    if (file_exists($file)) {
-        require $file;
-    }
-});
+<?php 
 
 if ('login' == rex_be_controller::getCurrentPage()) {
     rex_view::addJsFile(rex_url::addonAssets('be_password', 'javascript/be_password.js'));
@@ -29,16 +15,25 @@ rex_extension::register('PACKAGES_INCLUDED', function () {
         $a = explode('/', $_GET['be_password_request']);
         $controller = ucfirst($a[1]);
         $action = $a[2] . 'Action';
-        if (isset($a[3])) {
-            $arg = $a[3];
-        } else {
-            $arg = '';
+        
+        // Validate controller and action names to prevent security issues
+        if (!preg_match('/^[a-zA-Z][a-zA-Z0-9]*$/', $controller) || 
+            !preg_match('/^[a-zA-Z][a-zA-Z0-9]*Action$/', $action)) {
+            return;
         }
-        $controller_file = ucfirst($a[1]) . 'Controller.php';
-        $controller_class = 'BePassword\Controller\\' . ucfirst($a[1]) . 'Controller';
-        $c = new $controller_class();
-        $content = $c->{$action}($arg);
-        echo $content;
-        die();
+        
+        $arg = isset($a[3]) ? $a[3] : '';
+        $controller_file = $controller . 'Controller.php';
+        $controller_class = 'FriendsOfRedaxo\BePassword\Controller\\' . $controller . 'Controller';
+        
+        // Check if class exists before instantiation
+        if (class_exists($controller_class)) {
+            $c = new $controller_class();
+            if (method_exists($c, $action)) {
+                $content = $c->{$action}($arg);
+                echo $content;
+                die();
+            }
+        }
     }
 });
