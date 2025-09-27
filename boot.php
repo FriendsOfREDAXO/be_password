@@ -6,11 +6,11 @@ if ('login' == rex_be_controller::getCurrentPage()) {
 }
 
 rex_extension::register('PACKAGES_INCLUDED', function () {
+    $bePwdRequest = rex_request('be_password_request', 'string', '');
     if (
-        isset($_GET['be_password_request'])
-        && 2 <= substr_count($_GET['be_password_request'], '/')
+        '' < $bePwdRequest && 2 <= substr_count($bePwdRequest, '/')
     ) {
-        $a = explode('/', $_GET['be_password_request']);
+        $a = explode('/', $bePwdRequest);
         $controller = ucfirst($a[1]);
         $action = $a[2] . 'Action';
         

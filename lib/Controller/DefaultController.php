@@ -6,6 +6,7 @@ use FriendsOfRedaxo\BePassword\Services\RenderService;
 use FriendsOfRedaxo\BePassword\Services\FilterService;
 use FriendsOfRedaxo\BePassword\Services\RandomService;
 use rex_i18n;
+use rex_request;
 
 class DefaultController
 {
@@ -32,7 +33,8 @@ class DefaultController
         // Create CSRF token for form
         $csrf_token = \rex_csrf_token::factory('be_password_form');
 
-        if (isset($_POST['email'])) {
+        $email = rex_request::post('email', 'string', '');
+        if ('' < $email) {
             // Validate CSRF token
             if (!$csrf_token->isValid()) {
                 $error = rex_i18n::msg('be_password_error_csrf');
@@ -40,8 +42,8 @@ class DefaultController
                 $error = rex_i18n::msg('be_password_error_rate_limit', $this->getRateLimitWaitTime());
             } else {
                 // Validate email format
-                $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-                if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $email = filter_var($email, FILTER_SANITIZE_EMAIL);
+                if (false === $email) {
                     $error = rex_i18n::msg('be_password_error_invalid_email');
                 } else {
                 // Check if there is an account
@@ -126,15 +128,15 @@ class DefaultController
         $error = '';
         $success = '';
         $showForm = false;
-        $token = isset($_GET['token']) ? $_GET['token'] : '';
+        $token = rex_request::get ('token', 'string', '');
         
         // Validate token format - should be alphanumeric
-        if (!empty($token) && !preg_match('/^[a-zA-Z0-9]+$/', $token)) {
+        if ('' < $token && !preg_match('/^[a-zA-Z0-9]+$/', $token)) {
             $error = rex_i18n::msg('be_password_error_token');
             $token = ''; // Clear invalid token
         }
         
-        $pw = \rex_request::post('pw');
+        $pw = \rex_request::post('pw', 'string', );
         
         // Additional security measures (better than CSRF for password reset):
         // 1. Rate limiting is active (checkRateLimit in formAction)  
@@ -204,7 +206,7 @@ class DefaultController
      */
     private function checkRateLimit(): bool
     {
-        $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+        $ip = rex_request::server('REMOTE_ADDR', 'string', 'unknown');
         $sessionKey = 'be_password_rate_limit_' . md5($ip);
         
         $_SESSION[$sessionKey] ??= [];
@@ -232,7 +234,7 @@ class DefaultController
      */
     private function getRateLimitWaitTime(): int
     {
-        $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+        $ip = rex_request::server('REMOTE_ADDR', 'string', 'unknown');
         $sessionKey = 'be_password_rate_limit_' . md5($ip);
         
         if (empty($_SESSION[$sessionKey])) {

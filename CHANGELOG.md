@@ -16,6 +16,7 @@
 * **Controller Security:** Added validation to prevent malicious code execution through URL manipulation
 * **Token Security:** Improved password reset token validation (alphanumeric characters only)
 * **Timing Attack Protection:** Implemented consistent response times to prevent account enumeration
+* **Access to global vars:** use of corresponding `rex_request`-methods instead of direct access to $_GET, $_POST, and $_SERVER 
 
 ### 🐛 Bug Fixes
 
@@ -54,6 +55,7 @@
 ### Sonstige Änderungen
 
 * **streamline boot.php**: not nessesary or unused code removed
+
 
 
 ---
