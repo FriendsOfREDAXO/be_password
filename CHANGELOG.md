@@ -54,7 +54,8 @@
 
 ### Sonstige Änderungen
 
-* **streamline boot.php**: not nessesary or unused code removed
+* **streamline boot.php:** not nessesary or unused code removed
+* **Code Style:** Redaxo code style applied with PHP-CS-FIXER
 
 
 

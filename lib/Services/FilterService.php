@@ -2,9 +2,14 @@
 
 namespace FriendsOfRedaxo\BePassword\Services;
 
+use function chr;
+
+use const FILTER_SANITIZE_EMAIL;
+use const FILTER_SANITIZE_NUMBER_FLOAT;
+use const FILTER_SANITIZE_NUMBER_INT;
+
 class FilterService
 {
-
     public function filterString(string $value): string
     {
         $f = [chr(0), chr(1), chr(2), chr(3), chr(4), chr(5), chr(6), chr(7),
@@ -41,7 +46,4 @@ class FilterService
     {
         return filter_var($value, FILTER_SANITIZE_EMAIL);
     }
-
 }
-
-

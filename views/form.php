@@ -1,10 +1,10 @@
 <?php
+
 // check for new login page that comes with fragment for background image
 $isNewLoginPage = file_exists(rex_path::core('fragments/core/login_background.php'));
 
 $email = rex_request('email', 'string');
 $content = $successMessage = $errorMessage = $buttons = '';
-
 
 if (!empty($success)) {
     $successMessage = '<div class="rex-js-login-message">' . rex_view::success($success) . '</div>';
@@ -17,15 +17,12 @@ if (!empty($error)) {
 if (!$isNewLoginPage) {
     echo $successMessage;
     echo $errorMessage;
-}
-else {
+} else {
     $content .= $successMessage;
     $content .= $errorMessage;
 }
 
-
 if (empty($success)) {
-
     $content .= '<fieldset>';
 
     $formElements = [];
@@ -67,7 +64,6 @@ if (empty($success)) {
 }
 
 if (!(!empty($success) && !$isNewLoginPage)) {
-
     $fragment = new rex_fragment();
     $fragment->setVar('title', rex_i18n::msg('be_password_reset_password'), false);
     $fragment->setVar('body', $content, false);

@@ -9,12 +9,12 @@ class RenderService
 
     public function __construct()
     {
-        $this->pathes = array(
+        $this->pathes = [
             __DIR__ . '/../../',
-        );
+        ];
     }
 
-    public function render($__view, $__params = array())
+    public function render($__view, $__params = [])
     {
         foreach ($this->pathes as $__path) {
             if (file_exists($__path . '/' . $__view)) {
