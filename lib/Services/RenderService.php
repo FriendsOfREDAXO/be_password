@@ -4,7 +4,9 @@ namespace FriendsOfRedaxo\BePassword\Services;
 
 class RenderService
 {
+    /** @api */
     public $pathes;
+    /** @api */
     public $app;
 
     public function __construct()
@@ -14,6 +16,12 @@ class RenderService
         ];
     }
 
+    /**
+     * @api
+     * @param mixed $__view 
+     * @param array $__params 
+     * @return string|false 
+     */
     public function render($__view, $__params = [])
     {
         foreach ($this->pathes as $__path) {

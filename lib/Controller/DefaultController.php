@@ -26,6 +26,10 @@ class DefaultController
     private const RATE_LIMIT_REQUESTS = 3; // Max 3 requests
     private const RATE_LIMIT_WINDOW = 900; // in 15 minutes (900 seconds)
 
+    /**
+     * @api
+     * @return string|false
+     */
     public function indexAction()
     {
         $rs = new RenderService();
@@ -36,6 +40,10 @@ class DefaultController
         );
     }
 
+    /**
+     * @api
+     * @return mixed
+     */
     public function formAction()
     {
         $error = '';
@@ -67,7 +75,7 @@ class DefaultController
                     // Timing attack protection - add consistent delay
                     $this->addTimingDelay();
 
-                    if (!is_array($rows) || 0 == count($rows)) {
+                    if (0 === count($rows)) {
                         // Kein Account gefunden
                         // Aus Datenschutzgründen zeigen wir trotzdem eine Erfolgsmeldung
                         $success = rex_i18n::msg('be_password_success_mail');
@@ -76,7 +84,7 @@ class DefaultController
                         // Aus Datenschutzgründen zeigen wir trotzdem eine Erfolgsmeldung
                         $success = rex_i18n::msg('be_password_success_mail');
                     }
-                    if ('' == $success && '' == $error) {
+                    if ('' === $success) {
                         $row = $rows[0];
                         $user_id = $row['id'];
                         // Entferne alle bisherigen reset-tokens für diesen user
@@ -102,8 +110,8 @@ class DefaultController
                             $mail->Body = rex_i18n::rawMsg('be_password_mail_text', $url);
                             $mail->AltBody = strip_tags($mail->Body);
                             $mail->Subject = $subject;
-                            $mail->AddAddress($row['email'], '');
-                            $res = $mail->Send();
+                            $mail->addAddress($row['email'], '');
+                            $res = $mail->send();
                             if (false === $res) {
                                 $error = rex_i18n::msg('be_password_error_server');
                             } else {
@@ -134,6 +142,10 @@ class DefaultController
         );
     }
 
+    /**
+     * @api
+     * @return string|false
+     */
     public function resetAction()
     {
         $render_service = new RenderService();
@@ -149,7 +161,7 @@ class DefaultController
             $token = ''; // Clear invalid token
         }
 
-        $pw = rex_request::post('pw', 'string');
+        $pw = rex_request::post('pw', 'string', '');
 
         // Additional security measures (better than CSRF for password reset):
         // 1. Rate limiting is active (checkRateLimit in formAction)
@@ -167,7 +179,7 @@ class DefaultController
             $token,
             date('Y-m-d H:i:s', time()),
         ]);
-        if (!is_array($rows) || 1 != count($rows)) {
+        if (1 !== count($rows)) {
             $error = rex_i18n::msg('be_password_error_token');
             $user_id = null;
         } else {
@@ -175,16 +187,17 @@ class DefaultController
         }
 
         // Prüfe Passwort-Regeln
-        if ('' == $error && !empty($pw) && null !== $user_id) {
+        // REVIEW: muss $user_id null sein als Leer-Indikator ode rreicht ''; dann wäre der Typ immer string?
+        if ('' === $error && '' < $pw && null !== $user_id) {
             if (class_exists('\rex_backend_password_policy')) {
-                if (true !== $msg = rex_backend_password_policy::factory(rex::getProperty('password_policy', []))->check($pw, $user_id)) {
+                if (true !== $msg = rex_backend_password_policy::factory()->check($pw, $user_id)) {
                     $error = $msg;
                     $showForm = true;
                 }
             }
         }
 
-        if ('' == $error && !empty($pw) && null !== $user_id) {
+        if ('' === $error && '' < $pw && null !== $user_id) {
             // Setze passwort neu
             try {
                 $password = rex_login::passwordHash($pw);
@@ -250,7 +263,7 @@ class DefaultController
         $ip = rex_request::server('REMOTE_ADDR', 'string', 'unknown');
         $sessionKey = 'be_password_rate_limit_' . md5($ip);
 
-        if (empty($_SESSION[$sessionKey])) {
+        if (!isset($_SESSION[$sessionKey]) || !is_array($_SESSION[$sessionKey]) || 0 === count($_SESSION[$sessionKey])) {
             return 0;
         }
 
