@@ -2,11 +2,19 @@
 
 namespace FriendsOfRedaxo\BePassword\Controller;
 
+use Exception;
 use FriendsOfRedaxo\BePassword\Services\RenderService;
 use FriendsOfRedaxo\BePassword\Services\FilterService;
 use FriendsOfRedaxo\BePassword\Services\RandomService;
+use rex;
+use rex_backend_password_policy;
+use rex_csrf_token;
 use rex_i18n;
+use rex_login;
+use rex_mailer;
 use rex_request;
+use rex_sql;
+use rex_url;
 
 class DefaultController
 {
@@ -15,7 +23,7 @@ class DefaultController
     
     public function indexAction()
     {
-        $rs = new \FriendsOfRedaxo\BePassword\Services\RenderService();
+        $rs = new RenderService();
 
         return $rs->render(
             'views/index.php',
@@ -31,7 +39,7 @@ class DefaultController
         $rand = new RandomService();
         
         // Create CSRF token for form
-        $csrf_token = \rex_csrf_token::factory('be_password_form');
+        $csrf_token = rex_csrf_token::factory('be_password_form');
 
         $email = rex_request::post('email', 'string', '');
         if ('' < $email) {
@@ -47,7 +55,7 @@ class DefaultController
                     $error = rex_i18n::msg('be_password_error_invalid_email');
                 } else {
                 // Check if there is an account
-                $db = \rex_sql::factory();
+                $db = rex_sql::factory();
                 $rows = $db->getArray("SELECT * FROM rex_user WHERE email=?", array(
                     $email,
                 ));
@@ -67,7 +75,7 @@ class DefaultController
                     $row = $rows[0];
                     $user_id = $row['id'];
                     // Entferne alle bisherigen reset-tokens für diesen user
-                    $db = \rex_sql::factory();
+                    $db = rex_sql::factory();
                     $db->setTable(\rex::getTable('user_passwordreset'));
                     $db->setWhere(array('user_id' => $user_id));
                     $db->delete();
@@ -80,12 +88,12 @@ class DefaultController
                     }
                     
                     if (null !== $token) {
-                        $url = \rex::getServer() . 'redaxo/index.php?be_password_reset_token=' . $token;
+                        $url = rex::getServer() . 'redaxo/index.php?be_password_reset_token=' . $token;
                         $body = $rs->render('views/mail_reset_link.php', array(
                             'url' => $url,
                         ));
                         $subject = rex_i18n::msg('be_password_mail_title');
-                        $mail = new \rex_mailer();
+                        $mail = new rex_mailer();
                         $mail->Body = rex_i18n::rawMsg('be_password_mail_text', $url);
                         $mail->AltBody = strip_tags($mail->Body);
                         $mail->Subject = $subject;
@@ -136,7 +144,7 @@ class DefaultController
             $token = ''; // Clear invalid token
         }
         
-        $pw = \rex_request::post('pw', 'string', );
+        $pw = rex_request::post('pw', 'string', );
         
         // Additional security measures (better than CSRF for password reset):
         // 1. Rate limiting is active (checkRateLimit in formAction)  
@@ -145,9 +153,9 @@ class DefaultController
         // 4. Token is cryptographically secure (100 chars, random_int)
         // 5. Timing attack protection prevents token enumeration
 
-        $db = \rex_sql::factory();
+        $db = rex_sql::factory();
         $sql = "SELECT *
-            FROM `" . \rex::getTable('user_passwordreset') . "`
+            FROM `" . rex::getTable('user_passwordreset') . "`
             WHERE reset_password_token=?
             AND reset_password_token_expires>?";
         $rows = $db->getArray($sql, array(
@@ -164,7 +172,7 @@ class DefaultController
         // Prüfe Passwort-Regeln
         if ('' == $error && !empty($pw) && null !== $user_id) {
             if (class_exists('\rex_backend_password_policy')) {
-                if (true !== $msg = \rex_backend_password_policy::factory(\rex::getProperty('password_policy', []))->check($pw, $user_id)) {
+                if (true !== $msg = rex_backend_password_policy::factory(\rex::getProperty('password_policy', []))->check($pw, $user_id)) {
                     $error = $msg;
                     $showForm = true;
                 }
@@ -174,7 +182,7 @@ class DefaultController
         if ('' == $error && !empty($pw) && null !== $user_id) {
             // Setze passwort neu
             try {
-                $password = \rex_login::passwordHash($pw);
+                $password = rex_login::passwordHash($pw);
                 $db->setTable('rex_user');
                 $db->setWhere(array('id' => $user_id));
                 $db->setValue('password', $password);
@@ -182,11 +190,11 @@ class DefaultController
                 $db->update();
 
                 // Lösche tokens
-                $db = \rex_sql::factory();
+                $db = rex_sql::factory();
                 $db->setTable(\rex::getTable('user_passwordreset'));
                 $db->setWhere(array('user_id' => $user_id));
                 $db->delete();
-                $success = rex_i18n::msg('be_password_success_new_password') . ' <a href="' . \rex_url::currentBackendPage() . '">' . rex_i18n::msg('be_password_success_go_to_login') . '</a>.';
+                $success = rex_i18n::msg('be_password_success_new_password') . ' <a href="' . rex_url::currentBackendPage() . '">' . rex_i18n::msg('be_password_success_go_to_login') . '</a>.';
             } catch (Exception $e) {
                 $error = rex_i18n::msg('be_password_error_server');
             }
