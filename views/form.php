@@ -1,31 +1,31 @@
 <?php
+
 // check for new login page that comes with fragment for background image
 $isNewLoginPage = file_exists(rex_path::core('fragments/core/login_background.php'));
 
 $email = rex_request('email', 'string');
 $content = $successMessage = $errorMessage = $buttons = '';
 
+$success = isset($success) ? (string) $success : '';
+$error = isset($error) ? (string) $error : '';
 
-if (!empty($success)) {
+if ('' < $success) {
     $successMessage = '<div class="rex-js-login-message">' . rex_view::success($success) . '</div>';
 }
 
-if (!empty($error)) {
+if ('' < $error) {
     $errorMessage = '<div class="rex-js-login-message">' . rex_view::error($error) . '</div>';
 }
 
 if (!$isNewLoginPage) {
     echo $successMessage;
     echo $errorMessage;
-}
-else {
+} else {
     $content .= $successMessage;
     $content .= $errorMessage;
 }
 
-
-if (empty($success)) {
-
+if ('' === $success) {
     $content .= '<fieldset>';
 
     $formElements = [];
@@ -66,8 +66,7 @@ if (empty($success)) {
     $buttons = $fragment->parse('core/form/submit.php');
 }
 
-if (!(!empty($success) && !$isNewLoginPage)) {
-
+if (!('' < $success && !$isNewLoginPage)) {
     $fragment = new rex_fragment();
     $fragment->setVar('title', rex_i18n::msg('be_password_reset_password'), false);
     $fragment->setVar('body', $content, false);
@@ -77,7 +76,7 @@ if (!(!empty($success) && !$isNewLoginPage)) {
 
 $content = '
     <form class="has-handler" data-handler="submit:BePassHandler:showForm" method="post">
-        ' . (isset($csrf_token) ? $csrf_token->getHiddenField() : '') . '
+        ' . (is_a($csrf_token ?? null, \rex_csrf_token::class) ? $csrf_token->getHiddenField() : '') . '
         ' . $content . '
     </form>
     <script>
