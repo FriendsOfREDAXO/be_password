@@ -6,8 +6,6 @@ if ('login' == rex_be_controller::getCurrentPage()) {
 }
 
 rex_extension::register('PACKAGES_INCLUDED', function () {
-    // mailer-klasse selbst laden... warum auch immer
-    require_once __DIR__ . '/../phpmailer/lib/mailer.php';
     if (
         isset($_GET['be_password_request'])
         && 2 <= substr_count($_GET['be_password_request'], '/')
@@ -23,7 +21,6 @@ rex_extension::register('PACKAGES_INCLUDED', function () {
         }
         
         $arg = isset($a[3]) ? $a[3] : '';
-        $controller_file = $controller . 'Controller.php';
         $controller_class = 'FriendsOfRedaxo\BePassword\Controller\\' . $controller . 'Controller';
         
         // Check if class exists before instantiation

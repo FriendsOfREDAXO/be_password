@@ -1,6 +1,6 @@
 # Changelog
 
-## [3.0.0] – 25.09.2025
+## [3.0.0] – 27.09.2025
 
 ### 🚨 Breaking Changes
 
@@ -50,6 +50,11 @@
 * **Automatic Migration:** Most improvements work automatically after update
 * **PHP Requirement:** Ensure your server runs PHP 8.3 or higher
 * **No Configuration Changes:** All security improvements are enabled by default
+
+### Sonstige Änderungen
+
+* **streamline boot.php**: not nessesary or unused code removed
+
 
 ---
 
