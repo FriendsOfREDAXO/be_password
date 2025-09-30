@@ -140,6 +140,7 @@ class DefaultController
         $error = '';
         $success = '';
         $token = rex_request::get('token', 'string', '');
+        $showForm = false;
 
         // Validate token format - should be alphanumeric
         if ('' < $token && !preg_match('/^[a-zA-Z0-9]+$/', $token)) {
