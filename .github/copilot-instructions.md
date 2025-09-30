@@ -15,7 +15,7 @@ The be_password addon is a REDAXO CMS extension that provides password reset fun
 - **Security:** Enhanced input validation, rate limiting, and secure token generation
 
 ### Prerequisites and Environment Setup
-- PHP 8.3+ is required (minimum version as of version 3.0.0)
+- PHP 8.3+ is required
 - REDAXO 5.18.1 or higher is required
 - This is a REDAXO addon - it does NOT require Node.js, npm, composer, or any build tools
 - No database setup required for development - the addon handles database tables automatically
