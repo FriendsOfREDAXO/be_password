@@ -3,7 +3,6 @@
 namespace FriendsOfRedaxo\BePassword\Controller;
 
 use Exception;
-use FriendsOfRedaxo\BePassword\Services\FilterService;
 use FriendsOfRedaxo\BePassword\Services\RandomService;
 use FriendsOfRedaxo\BePassword\Services\RenderService;
 use rex;
@@ -31,12 +30,8 @@ class DefaultController
      */
     public function indexAction()
     {
-        $rs = new RenderService();
-
-        return $rs->render(
-            'views/index.php',
-            [],
-        );
+        return RenderService::factory()
+               ->parse('index.php');
     }
 
     /**
@@ -47,13 +42,13 @@ class DefaultController
     {
         $error = '';
         $success = '';
-        $rs = new RenderService();
         $rand = new RandomService();
 
         // Create CSRF token for form
         $csrf_token = rex_csrf_token::factory('be_password_form');
 
         $email = rex_request::post('email', 'string', '');
+
         if ('' < $email) {
             // Validate CSRF token
             if (!$csrf_token->isValid()) {
@@ -101,9 +96,6 @@ class DefaultController
 
                         if (null !== $token) {
                             $url = rex::getServer() . 'redaxo/index.php?be_password_reset_token=' . $token;
-                            $body = $rs->render('views/mail_reset_link.php', [
-                                'url' => $url,
-                            ]);
                             $subject = rex_i18n::msg('be_password_mail_title');
                             $mail = new rex_mailer();
                             $mail->Body = rex_i18n::rawMsg('be_password_mail_text', $url);
@@ -131,14 +123,12 @@ class DefaultController
             }
         }
 
-        return $rs->render(
-            'views/form.php',
-            [
-                'error' => $error,
-                'success' => $success,
-                'csrf_token' => $csrf_token,
-            ],
-        );
+        return RenderService::factory()
+               ->setErrorMsg($error)
+               ->setSuccessMsg($success)
+               ->setCsrfToken($csrf_token)
+               ->setEmail($email)
+               ->parse('form.php');
     }
 
     /**
@@ -147,14 +137,10 @@ class DefaultController
      */
     public function resetAction()
     {
-        $render_service = new RenderService();
-        // REVIEW: $filter_service is currently unused; consider removing it
-        $filter_service = new FilterService();
         $error = '';
         $success = '';
-        // REVIEW: Used in reset.php view, but this definition is nevver used nor passed; consider removing it
-        $showForm = false;
         $token = rex_request::get('token', 'string', '');
+        $showForm = false;
 
         // Validate token format - should be alphanumeric
         if ('' < $token && !preg_match('/^[a-zA-Z0-9]+$/', $token)) {
@@ -188,7 +174,7 @@ class DefaultController
         }
 
         // Prüfe Passwort-Regeln
-        // REVIEW: muss $user_id null sein als Leer-Indikator ode rreicht ''; dann wäre der Typ immer string?
+        // REVIEW: muss $user_id null sein als Leer-Indikator oder reicht ''; dann wäre der Typ immer string?
         if ('' === $error && '' < $pw && null !== $user_id) {
             if (class_exists('\rex_backend_password_policy')) {
                 if (true !== $msg = rex_backend_password_policy::factory()->check($pw, $user_id)) {
@@ -218,14 +204,14 @@ class DefaultController
                 $error = rex_i18n::msg('be_password_error_server');
             }
         }
-        return $render_service->render(
-            'views/reset.php',
-            [
-                'error' => $error,
-                'success' => $success,
-                'token' => $token,
-            ],
-        );
+
+        return RenderService::factory()
+               ->setErrorMsg($error)
+               ->setSuccessMsg($success)
+               ->setToken($token)
+               ->setEmail(rex_request::request('email', 'string', ''))
+               ->setShowForm($showForm)
+               ->parse('reset.php');
     }
 
     /**

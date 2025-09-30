@@ -1,28 +1,22 @@
 <?php
 
-// check for new login page that comes with fragment for background image
-$isNewLoginPage = file_exists(rex_path::core('fragments/core/login_background.php'));
+use FriendsOfRedaxo\BePassword\Services\RenderService;
 
-$email = rex_request('email', 'string');
-$content = $successMessage = $errorMessage = $buttons = '';
+/** @var RenderService $this */
 
-$success = isset($success) ? (string) $success : '';
-$error = isset($error) ? (string) $error : '';
+$email = $this->getEmail();
+$csrf_token = $this->getCsrfTokenHtml();
 
+$content = $buttons = '';
+
+$success = $this->getSuccessMsg();
 if ('' < $success) {
-    $successMessage = '<div class="rex-js-login-message">' . rex_view::success($success) . '</div>';
+    $content .= '<div class="rex-js-login-message">' . rex_view::success($success) . '</div>';
 }
 
+$error = $this->getErrorMsg();
 if ('' < $error) {
-    $errorMessage = '<div class="rex-js-login-message">' . rex_view::error($error) . '</div>';
-}
-
-if (!$isNewLoginPage) {
-    echo $successMessage;
-    echo $errorMessage;
-} else {
-    $content .= $successMessage;
-    $content .= $errorMessage;
+    $content .= '<div class="rex-js-login-message">' . rex_view::error($error) . '</div>';
 }
 
 if ('' === $success) {
@@ -66,18 +60,16 @@ if ('' === $success) {
     $buttons = $fragment->parse('core/form/submit.php');
 }
 
-if (!('' < $success && !$isNewLoginPage)) {
-    $fragment = new rex_fragment();
-    $fragment->setVar('title', rex_i18n::msg('be_password_reset_password'), false);
-    $fragment->setVar('body', $content, false);
-    $fragment->setVar('buttons', $buttons, false);
-    $content = $fragment->parse('core/page/section.php');
-}
+$fragment = new rex_fragment();
+$fragment->setVar('title', rex_i18n::msg('be_password_reset_password'), false);
+$fragment->setVar('body', $content, false);
+$fragment->setVar('buttons', $buttons, false);
+$content = $fragment->parse('core/page/section.php');
 
 $content = '
     <form class="has-handler" data-handler="submit:BePassHandler:showForm" method="post">
-        ' . (is_a($csrf_token ?? null, \rex_csrf_token::class) ? $csrf_token->getHiddenField() : '') . '
-        ' . $content . '
+        ' . $csrf_token . '
+       ' . $content . '
     </form>
     <script>
         (function() {
