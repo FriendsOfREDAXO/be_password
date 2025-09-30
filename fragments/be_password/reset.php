@@ -4,30 +4,19 @@ use FriendsOfRedaxo\BePassword\Services\RenderService;
 
 /** @var RenderService $this */
 
-// check for new login page that comes with fragment for background image
-$isNewLoginPage = file_exists(rex_path::core('fragments/core/login_background.php'));
-
 $email = $this->getEmail();
-$content = $successMessage = $errorMessage = $buttons = '';
+$content = $buttons = '';
 $showForm = $this->getShowForm();
 $token = $this->getToken();
 
 $success = $this->getSuccessMsg();
 if ('' < $success) {
-    $successMessage = '<div class="rex-js-login-message">' . rex_view::success($success) . '</div>';
+    $content .= '<div class="rex-js-login-message">' . rex_view::success($success) . '</div>';
 }
 
 $error = $this->getErrorMsg();
 if ('' < $error) {
-    $errorMessage = '<div class="rex-js-login-message">' . rex_view::error($error) . '</div>';
-}
-
-if (!$isNewLoginPage) {
-    echo $successMessage;
-    echo $errorMessage;
-} else {
-    $content .= $successMessage;
-    $content .= $errorMessage;
+    $content .= '<div class="rex-js-login-message">' . rex_view::error($error) . '</div>';
 }
 
 if ('' === $success || true === $showForm) {
@@ -71,7 +60,7 @@ if ('' === $success || true === $showForm) {
     $buttons = $fragment->parse('core/form/submit.php');
 }
 
-if (!('' < $success && !$isNewLoginPage) || true === $showForm) {
+if (true === $showForm) {
     $fragment = new rex_fragment();
     $fragment->setVar('title', rex_i18n::msg('be_password_select_new_password'), false);
     $fragment->setVar('body', $content, false);

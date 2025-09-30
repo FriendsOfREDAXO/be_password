@@ -8,6 +8,7 @@
 * **Namespace:** Changed from `BePassword\` to `FriendsOfRedaxo\BePassword\` for better organization
 * **Directory Structure:** Renamed `src/` to `lib/` following REDAXO conventions
 * **Directory Structure:** Moved `views/` to `fragments/be_password`
+* **Environment:** REDAXO 18.1 and above required
 
 ### 🔒 Security Improvements
 
