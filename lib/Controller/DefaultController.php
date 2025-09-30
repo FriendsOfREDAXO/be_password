@@ -17,7 +17,6 @@ use rex_sql;
 use rex_url;
 
 use function count;
-use function is_array;
 
 use const FILTER_SANITIZE_EMAIL;
 
@@ -149,9 +148,11 @@ class DefaultController
     public function resetAction()
     {
         $render_service = new RenderService();
+        // REVIEW: $filter_service is currently unused; consider removing it
         $filter_service = new FilterService();
         $error = '';
         $success = '';
+        // REVIEW: Used in reset.php view, but this definition is nevver used nor passed; consider removing it
         $showForm = false;
         $token = rex_request::get('token', 'string', '');
 
@@ -235,9 +236,12 @@ class DefaultController
         $ip = rex_request::server('REMOTE_ADDR', 'string', 'unknown');
         $sessionKey = 'be_password_rate_limit_' . md5($ip);
 
-        $_SESSION[$sessionKey] ??= [];
+        /**
+         * Sicherstellen, dass die Session auch existiert.
+         */
+        rex_login::startSession();
 
-        $requests = $_SESSION[$sessionKey];
+        $requests = rex_request::session($sessionKey, 'array', []);
         $now = time();
 
         // Clean old requests
@@ -250,7 +254,7 @@ class DefaultController
 
         // Add current request
         $requests[] = $now;
-        $_SESSION[$sessionKey] = $requests;
+        rex_request::setSession($sessionKey, $requests);
 
         return true;
     }
@@ -263,11 +267,17 @@ class DefaultController
         $ip = rex_request::server('REMOTE_ADDR', 'string', 'unknown');
         $sessionKey = 'be_password_rate_limit_' . md5($ip);
 
-        if (!isset($_SESSION[$sessionKey]) || !is_array($_SESSION[$sessionKey]) || 0 === count($_SESSION[$sessionKey])) {
+        /**
+         * Sicherstellen, dass die Session auch existiert.
+         */
+        rex_login::startSession();
+
+        $requests = rex_request::session($sessionKey, 'array', []);
+        if (0 === count($requests)) {
             return 0;
         }
 
-        $oldestRequest = min($_SESSION[$sessionKey]);
+        $oldestRequest = min($requests);
         $waitSeconds = self::RATE_LIMIT_WINDOW - (time() - $oldestRequest);
 
         return max(0, ceil($waitSeconds / 60));
