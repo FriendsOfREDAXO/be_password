@@ -83,7 +83,7 @@ class DefaultController
                         $user_id = $row['id'];
                         // Entferne alle bisherigen reset-tokens für diesen user
                         $db = rex_sql::factory();
-                        $db->setTable(rex::getTable('user_passwordreset'));
+                        $db->setTable(rex::getTable('be_password'));
                         $db->setWhere(['user_id' => $user_id]);
                         $db->delete();
                         // Erzeuge neuen Token
@@ -107,7 +107,7 @@ class DefaultController
                                 $error = rex_i18n::msg('be_password_error_server');
                             } else {
                                 try {
-                                    $db->setTable(rex::getTable('user_passwordreset'));
+                                    $db->setTable(rex::getTable('be_password'));
                                     $db->setValue('reset_password_token_expires', date('Y-m-d H:i:s', time() + 3600))
                                         ->setValue('user_id', $user_id)
                                         ->setValue('reset_password_token', $token);
@@ -159,7 +159,7 @@ class DefaultController
 
         $db = rex_sql::factory();
         $sql = 'SELECT *
-            FROM `' . rex::getTable('user_passwordreset') . '`
+            FROM `' . rex::getTable('be_password') . '`
             WHERE reset_password_token=?
             AND reset_password_token_expires>?';
         $rows = $db->getArray($sql, [
@@ -196,7 +196,7 @@ class DefaultController
 
                 // Lösche tokens
                 $db = rex_sql::factory();
-                $db->setTable(rex::getTable('user_passwordreset'));
+                $db->setTable(rex::getTable('be_password'));
                 $db->setWhere(['user_id' => $user_id]);
                 $db->delete();
                 $success = rex_i18n::msg('be_password_success_new_password') . ' <a href="' . rex_url::currentBackendPage() . '">' . rex_i18n::msg('be_password_success_go_to_login') . '</a>.';

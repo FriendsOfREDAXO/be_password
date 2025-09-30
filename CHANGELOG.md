@@ -9,6 +9,7 @@
 * **Directory Structure:** Renamed `src/` to `lib/` following REDAXO conventions
 * **Directory Structure:** Moved `views/` to `fragments/be_password`
 * **Environment:** REDAXO 18.1 and above required
+* **Database Table:** Renamed database table from `user_passwordreset` to `be_password` following REDAXO naming conventions
 
 ### 🔒 Security Improvements
 
@@ -40,7 +41,8 @@
 * **Code Quality:** Modern PHP syntax with proper type declarations and mitigation of code issues reported by REXSTAN 
 * **Performance:** Optimized database queries and reduced memory usage  
 * **Standards Compliance:** Code follows current PHP and REDAXO best practices
-* **Maintainability:** Improved code structure and documentation 
+* **Maintainability:** Improved code structure and documentation
+* **Database Migration:** Automatic table rename during upgrade from versions < 3.0.0 
 
 ### 📋 What's Better for Users
 
