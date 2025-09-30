@@ -1,0 +1,24 @@
+be_password = Wachtwoord resetten
+
+be_password_email = E-mailadres
+be_password_password = Wachtwoord
+
+be_password_send = Verzenden
+be_password_cancel = Annuleren
+
+be_password_forgot_password = Wachtwoord vergeten?
+be_password_reset_password = Wachtwoord resetten
+be_password_select_new_password = Nieuw wachtwoord instellen
+
+be_password_mail_title = Wachtwoord resetten voor REDAXO
+be_password_mail_text = <p>Om het wachtwoord te resetten, open de volgende link in uw browser: <br><a href="{0}">{0}</a></p>
+
+be_password_error_token = De link om het wachtwoord te resetten is niet meer geldig. Vraag een nieuwe aan.
+be_password_error_server = E-mail kon niet worden verzonden.
+be_password_error_invalid_email = Voer een geldig e-mailadres in.
+be_password_error_csrf = Beveiligingsfout. Probeer het opnieuw.
+be_password_error_rate_limit = Te veel verzoeken. Wacht {0} minuten voordat u het opnieuw probeert.
+
+be_password_success_mail = Er is een e-mail met informatie over het resetten van het wachtwoord verzonden, als het opgegeven gebruikersaccount in het systeem bestaat.
+be_password_success_new_password = Het nieuwe wachtwoord is ingesteld.
+be_password_success_go_to_login = Ga naar login

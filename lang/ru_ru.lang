@@ -1,0 +1,24 @@
+be_password = Сброс пароля
+
+be_password_email = Адрес электронной почты
+be_password_password = Пароль
+
+be_password_send = Отправить
+be_password_cancel = Отмена
+
+be_password_forgot_password = Забыли пароль?
+be_password_reset_password = Сброс пароля
+be_password_select_new_password = Установить новый пароль
+
+be_password_mail_title = Сброс пароля для REDAXO
+be_password_mail_text = <p>Чтобы сбросить пароль, откройте следующую ссылку в браузере: <br><a href="{0}">{0}</a></p>
+
+be_password_error_token = Ссылка для сброса пароля больше не действительна. Пожалуйста, запросите новую.
+be_password_error_server = Не удалось отправить электронное письмо.
+be_password_error_invalid_email = Пожалуйста, введите действительный адрес электронной почты.
+be_password_error_csrf = Ошибка безопасности. Пожалуйста, попробуйте еще раз.
+be_password_error_rate_limit = Слишком много запросов. Пожалуйста, подождите {0} минут, прежде чем попробовать снова.
+
+be_password_success_mail = Письмо с информацией о сбросе пароля было отправлено, если указанная учетная запись пользователя существует в системе.
+be_password_success_new_password = Новый пароль установлен.
+be_password_success_go_to_login = Перейти к входу

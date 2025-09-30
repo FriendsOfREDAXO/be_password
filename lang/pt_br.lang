@@ -1,0 +1,24 @@
+be_password = Redefinir senha
+
+be_password_email = Endereço de e-mail
+be_password_password = Senha
+
+be_password_send = Enviar
+be_password_cancel = Cancelar
+
+be_password_forgot_password = Esqueceu a senha?
+be_password_reset_password = Redefinir senha
+be_password_select_new_password = Definir nova senha
+
+be_password_mail_title = Redefinir senha para REDAXO
+be_password_mail_text = <p>Para redefinir a senha, abra o seguinte link no seu navegador: <br><a href="{0}">{0}</a></p>
+
+be_password_error_token = O link para redefinir a senha não é mais válido. Por favor, solicite um novo.
+be_password_error_server = O e-mail não pôde ser enviado.
+be_password_error_invalid_email = Por favor, insira um endereço de e-mail válido.
+be_password_error_csrf = Erro de segurança. Por favor, tente novamente.
+be_password_error_rate_limit = Muitas solicitações. Por favor, aguarde {0} minutos antes de tentar novamente.
+
+be_password_success_mail = Um e-mail com informações para redefinir a senha foi enviado, se a conta de usuário especificada existir no sistema.
+be_password_success_new_password = A nova senha foi definida.
+be_password_success_go_to_login = Continuar para o login

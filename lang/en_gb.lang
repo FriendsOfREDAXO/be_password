@@ -1,8 +1,4 @@
-be_password = Rbe_password_error_token = The link to reset your password is no longer valid. Please request a new one.
-be_password_error_server = E-mail could not be sent.
-be_password_error_invalid_email = Please enter a valid email address.
-be_password_error_csrf = Security error. Please try again.
-be_password_error_rate_limit = Too many requests. Please wait {0} minutes before trying again.et password
+be_password = Reset password
 
 be_password_email = Email
 be_password_password = Password
@@ -19,6 +15,9 @@ be_password_mail_text = <p>To reset the password, please use the following link 
 
 be_password_error_token = The link to reset your password is no longer valid. Please request a new one.
 be_password_error_server = Email could not be sent.
+be_password_error_invalid_email = Please enter a valid email address.
+be_password_error_csrf = Security error. Please try again.
+be_password_error_rate_limit = Too many requests. Please wait {0} minutes before trying again.
 
 be_password_success_mail = An e-mail with information about resetting the password has been sent, if the specified user account exists.
 be_password_success_new_password = The new password has been set.
