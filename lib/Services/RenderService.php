@@ -65,7 +65,7 @@ class RenderService extends rex_fragment
      */
     public function setToken(string $token): self
     {
-        $this->setVar('successMessage', $token, false);
+        $this->setVar('token', $token, false);
         return $this;
     }
 
