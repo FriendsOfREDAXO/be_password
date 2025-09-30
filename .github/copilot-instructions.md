@@ -6,8 +6,17 @@ The be_password addon is a REDAXO CMS extension that provides password reset fun
 
 ## Working Effectively
 
+### Version 3.0.0 Updates
+**Important changes from version 3.0.0 (September 2025):**
+- **Directory Structure:** `src/` renamed to `lib/`, `views/` moved to `fragments/be_password/`
+- **Namespace:** Changed from `BePassword\` to `FriendsOfRedaxo\BePassword\`
+- **PHP Requirement:** Minimum PHP 8.3+ (up from PHP 7.x in previous versions)
+- **Database Table:** Renamed from `user_passwordreset` to `be_password`
+- **Security:** Enhanced input validation, rate limiting, and secure token generation
+
 ### Prerequisites and Environment Setup
-- PHP 8.0+ is required (PHP 8.3+ recommended)
+- PHP 8.3+ is required (minimum version as of version 3.0.0)
+- REDAXO 5.18.1 or higher is required
 - This is a REDAXO addon - it does NOT require Node.js, npm, composer, or any build tools
 - No database setup required for development - the addon handles database tables automatically
 
@@ -20,8 +29,8 @@ The be_password addon is a REDAXO CMS extension that provides password reset fun
   - NEVER CANCEL: This validation is fast but critical for catching syntax errors
 - **Test individual services:**
   ```bash
-  php -r "require 'src/Services/RandomService.php'; \$r = new BePassword\Services\RandomService(); echo \$r->createToken(10);"
-  php -r "require 'src/Services/FilterService.php'; \$f = new BePassword\Services\FilterService(); echo \$f->filterEmail('test@example.com');"
+  php -r "require 'lib/Services/RandomService.php'; \$r = new FriendsOfRedaxo\BePassword\Services\RandomService(); echo \$r->createToken(10);"
+  php -r "require 'lib/Services/FilterService.php'; \$f = new FriendsOfRedaxo\BePassword\Services\FilterService(); echo \$f->filterEmail('test@example.com');"
   ```
 
 ### No Build Process Required
@@ -43,7 +52,7 @@ The be_password addon is a REDAXO CMS extension that provides password reset fun
 ├── install.php              # Database table creation
 ├── uninstall.php           # Database table cleanup  
 ├── package.yml             # REDAXO addon metadata
-├── src/
+├── lib/
 │   ├── Controller/
 │   │   └── DefaultController.php    # Main password reset logic
 │   └── Services/
@@ -78,6 +87,11 @@ The be_password addon is a REDAXO CMS extension that provides password reset fun
 - The addon integrates with REDAXO's existing login page - test UI changes carefully
 - Email functionality requires REDAXO's phpmailer addon (specified in package.yml)
 - Database operations use REDAXO's rex_sql classes - do not write raw SQL
+- **Security Best Practices (v3.0.0+):**
+  - Use `rex_request()` methods instead of direct access to `$_GET`, `$_POST`, `$_SERVER`
+  - Token generation uses cryptographically secure `random_int()` instead of `rand()`
+  - Rate limiting is implemented (max 3 attempts per 15 minutes)
+  - Input validation and sanitization prevents injection attacks
 
 ### Testing Your Changes
 - **CRITICAL**: This addon cannot be fully tested without a running REDAXO installation
@@ -89,11 +103,15 @@ The be_password addon is a REDAXO CMS extension that provides password reset fun
 - **Service-level testing:**
   ```bash
   # Test token generation
-  php -r "require 'src/Services/RandomService.php'; \$r = new BePassword\Services\RandomService(); echo 'Token: ' . \$r->createToken(32) . PHP_EOL;"
+  php -r "require 'lib/Services/RandomService.php'; \$r = new FriendsOfRedaxo\BePassword\Services\RandomService(); echo 'Token: ' . \$r->createToken(32) . PHP_EOL;"
   
   # Test input filtering  
-  php -r "require 'src/Services/FilterService.php'; \$f = new BePassword\Services\FilterService(); echo 'Filtered: ' . \$f->filterString('test\nstring') . PHP_EOL;"
+  php -r "require 'lib/Services/FilterService.php'; \$f = new FriendsOfRedaxo\BePassword\Services\FilterService(); echo 'Filtered: ' . \$f->filterString('test\nstring') . PHP_EOL;"
   ```
+- **Code Quality (v3.0.0+):**
+  - Code follows REDAXO best practices and PHP-CS-FIXER standards
+  - Type declarations are used throughout for better type safety
+  - REXSTAN analysis is performed to catch potential issues
 
 ### Manual Validation Scenarios
 **Since full functional testing requires REDAXO installation, focus on these validation steps:**
@@ -105,12 +123,12 @@ The be_password addon is a REDAXO CMS extension that provides password reset fun
 
 2. **Service Testing** (when modifying services):
    ```bash
-   php -r "require 'src/Services/RandomService.php'; \$service = new BePassword\Services\RandomService(); var_dump(\$service->createToken(50));"
+   php -r "require 'lib/Services/RandomService.php'; \$service = new FriendsOfRedaxo\BePassword\Services\RandomService(); var_dump(\$service->createToken(50));"
    ```
 
 3. **View Rendering** (when modifying templates):
    - Views cannot be tested in isolation as they require REDAXO classes (rex_i18n, etc.)
-   - Only validate PHP syntax of view files: `php -l views/filename.php`
+   - Only validate PHP syntax of fragment files: `php -l fragments/be_password/filename.php`
 
 ## Deployment and Release
 
@@ -165,10 +183,10 @@ The be_password addon is a REDAXO CMS extension that provides password reset fun
 find . -name "*.php" -exec php -l {} \;
 
 # Test RandomService 
-php -r 'require "src/Services/RandomService.php"; echo (new BePassword\Services\RandomService())->createToken(10);'
+php -r 'require "lib/Services/RandomService.php"; echo (new FriendsOfRedaxo\BePassword\Services\RandomService())->createToken(10);'
 
 # Test FilterService
-php -r 'require "src/Services/FilterService.php"; echo (new BePassword\Services\FilterService())->filterEmail("test@domain.com");'
+php -r 'require "lib/Services/FilterService.php"; echo (new FriendsOfRedaxo\BePassword\Services\FilterService())->filterEmail("test@domain.com");'
 ```
 
 ### File Structure Reference
@@ -177,10 +195,10 @@ php -r 'require "src/Services/FilterService.php"; echo (new BePassword\Services\
 ls -la /home/runner/work/be_password/be_password/
 
 # Key directories
-ls -la src/          # Core PHP classes
-ls -la views/        # Template files  
-ls -la assets/       # CSS and JavaScript
-ls -la lang/         # Translation files
+ls -la lib/            # Core PHP classes
+ls -la fragments/      # Template files  
+ls -la assets/         # CSS and JavaScript
+ls -la lang/           # Translation files
 ```
 
 Fixes #37.
