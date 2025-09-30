@@ -61,7 +61,7 @@ if ('' === $success) {
 }
 
 $fragment = new rex_fragment();
-$fragment->setVar('title', 'xx' . rex_i18n::msg('be_password_reset_password'), false);
+$fragment->setVar('title', rex_i18n::msg('be_password_reset_password'), false);
 $fragment->setVar('body', $content, false);
 $fragment->setVar('buttons', $buttons, false);
 $content = $fragment->parse('core/page/section.php');
