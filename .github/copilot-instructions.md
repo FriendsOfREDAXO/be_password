@@ -50,10 +50,11 @@ The be_password addon is a REDAXO CMS extension that provides password reset fun
 │       ├── RenderService.php        # View rendering
 │       ├── RandomService.php        # Token generation
 │       └── FilterService.php        # Input sanitization
-├── views/                   # PHP template files
-│   ├── index.php           # "Forgot Password?" link
-│   ├── form.php            # Email input form
-│   └── reset.php           # New password form
+├── fragments/                   # PHP template files according to REDAXO conventions
+│   └── be_password              # place for addon-specific fragments
+│       ├── index.php            # "Forgot Password?" link
+│       ├── form.php             # Email input form
+│       └── reset.php            # New password form
 ├── assets/
 │   ├── be_password.css     # Minimal styling
 │   └── javascript/
