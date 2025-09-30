@@ -1,0 +1,24 @@
+be_password = Återställ lösenord
+
+be_password_email = E-postadress
+be_password_password = Lösenord
+
+be_password_send = Skicka
+be_password_cancel = Avbryt
+
+be_password_forgot_password = Glömt lösenordet?
+be_password_reset_password = Återställ lösenord
+be_password_select_new_password = Välj nytt lösenord
+
+be_password_mail_title = Återställ lösenord för REDAXO
+be_password_mail_text = <p>För att återställa lösenordet, öppna följande länk i din webbläsare: <br><a href="{0}">{0}</a></p>
+
+be_password_error_token = Länken för att återställa lösenordet är inte längre giltig. Vänligen begär en ny.
+be_password_error_server = E-postmeddelandet kunde inte skickas.
+be_password_error_invalid_email = Vänligen ange en giltig e-postadress.
+be_password_error_csrf = Säkerhetsfel. Vänligen försök igen.
+be_password_error_rate_limit = För många förfrågningar. Vänligen vänta {0} minuter innan du försöker igen.
+
+be_password_success_mail = Ett e-postmeddelande med information om att återställa lösenordet har skickats, om det angivna användarkontot finns i systemet.
+be_password_success_new_password = Det nya lösenordet har ställts in.
+be_password_success_go_to_login = Fortsätt till inloggning

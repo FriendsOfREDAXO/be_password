@@ -1,0 +1,24 @@
+be_password = Reimposta password
+
+be_password_email = Indirizzo e-mail
+be_password_password = Password
+
+be_password_send = Invia
+be_password_cancel = Annulla
+
+be_password_forgot_password = Password dimenticata?
+be_password_reset_password = Reimposta password
+be_password_select_new_password = Imposta nuova password
+
+be_password_mail_title = Reimposta password per REDAXO
+be_password_mail_text = <p>Per reimpostare la password, apri il seguente link nel tuo browser: <br><a href="{0}">{0}</a></p>
+
+be_password_error_token = Il link per reimpostare la password non è più valido. Si prega di richiederne uno nuovo.
+be_password_error_server = L'e-mail non è stata inviata.
+be_password_error_invalid_email = Inserisci un indirizzo e-mail valido.
+be_password_error_csrf = Errore di sicurezza. Riprova.
+be_password_error_rate_limit = Troppe richieste. Attendi {0} minuti prima di riprovare.
+
+be_password_success_mail = È stata inviata un'e-mail con le informazioni per reimpostare la password, se l'account utente specificato existe nel sistema.
+be_password_success_new_password = La nuova password è stata impostata.
+be_password_success_go_to_login = Continua al login
