@@ -46,7 +46,7 @@ if ('' === $success) {
     $inputGroup = $fragment->parse('core/form/input_group.php');
 
     $n = [];
-    $n['label'] = '<label for="be_password_email_input">Oh Ja! ' . rex_i18n::msg('be_password_email') . ':</label>';
+    $n['label'] = '<label for="be_password_email_input">' . rex_i18n::msg('be_password_email') . ':</label>';
     $n['field'] = $inputGroup;
     $n['class'] = 'rex-form-group-vertical';
     $formElements[] = $n;
