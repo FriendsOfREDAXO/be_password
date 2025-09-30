@@ -200,5 +200,3 @@ ls -la fragments/      # Template files
 ls -la assets/         # CSS and JavaScript
 ls -la lang/           # Translation files
 ```
-
-Fixes #37.
