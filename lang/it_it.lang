@@ -19,6 +19,6 @@ be_password_error_invalid_email = Inserisci un indirizzo e-mail valido.
 be_password_error_csrf = Errore di sicurezza. Riprova.
 be_password_error_rate_limit = Troppe richieste. Attendi {0} minuti prima di riprovare.
 
-be_password_success_mail = È stata inviata un'e-mail con le informazioni per reimpostare la password, se l'account utente specificato existe nel sistema.
+be_password_success_mail = È stata inviata un'e-mail con le informazioni per reimpostare la password, se l'account utente specificato esiste nel sistema.
 be_password_success_new_password = La nuova password è stata impostata.
 be_password_success_go_to_login = Continua al login
