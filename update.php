@@ -1,5 +1,7 @@
 <?php
 
+/** @var rex_addon $this */
+
 // Rename table from user_passwordreset to be_password for version 3.0.0+
 if (version_compare($this->getVersion(), '3.0.0', '<')) {
     $oldTableName = rex::getTable('user_passwordreset');

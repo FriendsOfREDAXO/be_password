@@ -63,28 +63,29 @@ class DefaultController
                 } else {
                     // Check if there is an account
                     $db = rex_sql::factory();
-                    $rows = $db->getArray('SELECT * FROM rex_user WHERE email=?', [
-                        $email,
-                    ]);
+                    $db->setTable(rex::getTable('user'));
+                    $db->setWhere('email = :email', [':email' => $email]);
+                    $db->select();
+                    $rowCount = $db->getRows();
+
                     // Timing attack protection - add consistent delay
                     $this->addTimingDelay();
 
-                    if (0 === count($rows)) {
+                    if (0 === $rowCount) {
                         // Kein Account gefunden
                         // Aus Datenschutzgründen zeigen wir trotzdem eine Erfolgsmeldung
                         $success = rex_i18n::msg('be_password_success_mail');
-                    } elseif (1 < count($rows)) {
+                    } elseif (1 < $rowCount) {
                         // Mehrere Accounts mit der gleichen Emailadresse vorhanden
                         // Aus Datenschutzgründen zeigen wir trotzdem eine Erfolgsmeldung
                         $success = rex_i18n::msg('be_password_success_mail');
                     }
                     if ('' === $success) {
-                        $row = $rows[0];
-                        $user_id = $row['id'];
+                        $user_id = $db->getValue('id');
+                        $email = $db->getValue('email');
                         // Entferne alle bisherigen reset-tokens für diesen user
-                        $db = rex_sql::factory();
                         $db->setTable(rex::getTable('be_password'));
-                        $db->setWhere(['user_id' => $user_id]);
+                        $db->setWhere('usewr_id = :uid', ['uid' => $user_id]);
                         $db->delete();
                         // Erzeuge neuen Token
                         try {
@@ -101,7 +102,7 @@ class DefaultController
                             $mail->Body = rex_i18n::rawMsg('be_password_mail_text', $url);
                             $mail->AltBody = strip_tags($mail->Body);
                             $mail->Subject = $subject;
-                            $mail->addAddress($row['email'], '');
+                            $mail->addAddress($email, '');
                             $res = $mail->send();
                             if (false === $res) {
                                 $error = rex_i18n::msg('be_password_error_server');
@@ -158,25 +159,24 @@ class DefaultController
         // 5. Timing attack protection prevents token enumeration
 
         $db = rex_sql::factory();
-        $sql = 'SELECT *
-            FROM `' . rex::getTable('be_password') . '`
-            WHERE reset_password_token=?
-            AND reset_password_token_expires>?';
-        $rows = $db->getArray($sql, [
-            $token,
-            date('Y-m-d H:i:s', time()),
-        ]);
-        if (1 !== count($rows)) {
+        $db->setTable(rex::getTable('be_password'));
+        $db->setWhere(
+            'reset_password_token = :token AND reset_password_token_expires > :expires',
+            [':token' => $token, ':expires' => date('Y-m-d H:i:s', time())],
+        );
+        $db->select();
+        $rowCount = $db->getRows();
+        if (1 !== $rowCount) {
             $error = rex_i18n::msg('be_password_error_token');
             $user_id = null;
         } else {
-            $user_id = $rows[0]['user_id'];
+            $user_id = $db->getValue('user_id');
         }
 
         // Prüfe Passwort-Regeln
         // REVIEW: muss $user_id null sein als Leer-Indikator oder reicht ''; dann wäre der Typ immer string?
         if ('' === $error && '' < $pw && null !== $user_id) {
-            if (class_exists('\rex_backend_password_policy')) {
+            if (class_exists(rex_backend_password_policy::class)) {
                 if (true !== $msg = rex_backend_password_policy::factory()->check($pw, $user_id)) {
                     $error = $msg;
                     $showForm = true;
@@ -188,8 +188,8 @@ class DefaultController
             // Setze passwort neu
             try {
                 $password = rex_login::passwordHash($pw);
-                $db->setTable('rex_user');
-                $db->setWhere(['id' => $user_id]);
+                $db->setTable(rex::getTable('user'));
+                $db->setWhere('id = :id', [':id' => $user_id]);
                 $db->setValue('password', $password);
                 $db->setValue('login_tries', 0);
                 $db->update();
@@ -197,7 +197,7 @@ class DefaultController
                 // Lösche tokens
                 $db = rex_sql::factory();
                 $db->setTable(rex::getTable('be_password'));
-                $db->setWhere(['user_id' => $user_id]);
+                $db->setWhere('user_id = :user_id', [':user_id' => $user_id]);
                 $db->delete();
                 $success = rex_i18n::msg('be_password_success_new_password') . ' <a href="' . rex_url::currentBackendPage() . '">' . rex_i18n::msg('be_password_success_go_to_login') . '</a>.';
             } catch (Exception $e) {
