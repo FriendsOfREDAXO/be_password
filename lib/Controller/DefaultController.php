@@ -85,7 +85,7 @@ class DefaultController
                         $email = $db->getValue('email');
                         // Entferne alle bisherigen reset-tokens für diesen user
                         $db->setTable(rex::getTable('be_password'));
-                        $db->setWhere('usewr_id = :uid', ['uid' => $user_id]);
+                        $db->setWhere('user_id = :uid', ['uid' => $user_id]);
                         $db->delete();
                         // Erzeuge neuen Token
                         try {
