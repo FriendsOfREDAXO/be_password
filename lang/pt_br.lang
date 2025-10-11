@@ -4,6 +4,7 @@ be_password_email = Endereço de e-mail
 be_password_password = Senha
 
 be_password_send = Enviar
+be_password_save = Salvar
 be_password_cancel = Cancelar
 
 be_password_forgot_password = Esqueceu a senha?

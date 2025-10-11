@@ -4,6 +4,7 @@ be_password_email = Email
 be_password_password = Password
 
 be_password_send = Send
+be_password_save = Save
 be_password_cancel = Cancel
 
 be_password_forgot_password = Forgot password?

@@ -48,7 +48,7 @@ if ('' === $success || true === $showForm) {
 
     $formElements = [];
     $n = [];
-    $n['field'] = '<button class="btn btn-primary" type="submit">' . rex_i18n::msg('be_password_send') . '</button>';
+    $n['field'] = '<button class="btn btn-primary" type="submit">' . rex_i18n::msg('be_password_save') . '</button>';
     $formElements[] = $n;
 
     $n = [];
