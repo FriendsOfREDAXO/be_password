@@ -4,6 +4,7 @@ be_password_email = E-mailadres
 be_password_password = Wachtwoord
 
 be_password_send = Verzenden
+be_password_save = Opslaan
 be_password_cancel = Annuleren
 
 be_password_forgot_password = Wachtwoord vergeten?

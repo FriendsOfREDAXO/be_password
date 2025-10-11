@@ -4,6 +4,7 @@ be_password_email = E-postadress
 be_password_password = Lösenord
 
 be_password_send = Skicka
+be_password_save = Spara
 be_password_cancel = Avbryt
 
 be_password_forgot_password = Glömt lösenordet?

@@ -4,6 +4,7 @@ be_password_email = Адрес электронной почты
 be_password_password = Пароль
 
 be_password_send = Отправить
+be_password_save = Сохранить
 be_password_cancel = Отмена
 
 be_password_forgot_password = Забыли пароль?
