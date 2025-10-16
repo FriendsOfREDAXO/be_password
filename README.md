@@ -29,7 +29,7 @@ Sollte das AddOn nicht verfügbar sein oder der E-Mail-Versand nicht funktionier
 
 ## Lizenz
 
-MIT Lizenz, siehe [LICENSE.md](https://github.com/alexplusde/neues/blob/master/LICENSE)  
+MIT Lizenz, siehe [LICENSE](https://github.com/FriendsOfREDAXO/be_password/blob/main/LICENSE)  
 
 ## Autor
 
